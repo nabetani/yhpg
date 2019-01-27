@@ -7,6 +7,7 @@
     %meta{ :charset=>'utf-8' }
     %title=TITLE
     :css
+      @import url('https://fonts.googleapis.com/css?family=Marvel');
       body, textarea {
         font-family: sans-serif;
         font-size:11pt;
@@ -119,10 +120,10 @@
       -th = tw * ch / cw
       -cg=0.05
       -cells = Cells.new(layers)
-      -z = [1.5 / layers.min, 1].min
+      -z = [1.2 / layers.min, 1].min
       -left0 = [(m-0.5)*layers.last - w/z/2, 0].max
       %svg{ width:"#{tw}px", height:"#{th}px",  viewBox:"#{-gap} #{-gap} #{w+gap*2} #{h+gap*2}" }
-        %g{ "font-size"=>0.7, "font-family"=>"Arial Narrow", "text-anchor"=>"middle", fill:"black" }
+        %g{ "font-size"=>0.7, "font-family"=>"'Marvel', sans-serif", "text-anchor"=>"middle", fill:"black" }
           - layers.each.with_index do |layer,y|
             - left = [(left0 / layer-1).round * layer,0].max
             - right = left + (w/z).ceil + layer*2

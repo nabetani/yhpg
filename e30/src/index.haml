@@ -7,6 +7,7 @@
     %meta{ :charset=>'utf-8' }
     %title=TITLE
     :css
+      @import url('https://fonts.googleapis.com/css?family=Marvel');
       body, textarea {
         font-family: sans-serif;
         font-size:11pt;
@@ -112,7 +113,7 @@
       -cg=0.05
       -cells = Cells.new(layers)
       %svg{ width:"#{tw}px", height:"#{th}px",  viewBox:"#{-gap} #{-gap} #{w+gap*2} #{h+gap*2}" }
-        %g{ "font-size"=>0.7, "font-family"=>"Arial Narrow", "text-anchor"=>"middle", fill:"black" }
+        %g{ "font-size"=>0.7, "font-family"=>"'Marvel', sans-serif", "text-anchor"=>"middle", fill:"black" }
           - layers.each.with_index do |layer,y|
             - 0.step(to:w, by:layer) do |x|
               -fill = x/layer==m-1 && y==layers.size-1 ? '#afa' : '#eee'
