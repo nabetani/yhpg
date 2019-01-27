@@ -21,9 +21,10 @@ class Cells
 
     (left..right).sum{ |xx| at(y-1,xx) } % 1000
   end
-
 end
 
 def solve( src )
-  "not impl"
+  wss, ms = src.split("/")
+  ws = wss.split(",").map(&:to_i)
+  Cells.new(ws).at(ws.size-1, ms.to_i-1)
 end
