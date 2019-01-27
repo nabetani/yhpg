@@ -7,7 +7,7 @@ EVENT_URL="https://yhpg.doorkeeper.jp/events/84247"
 QIITA_URL = nil
 TITLE="上段の矩形の和 #{EVENT_DATE.join(".")}"
 
-S0="4,6,1,5/3"
+S0="4,6,1,5/2"
 
 SAMPLES = [
   S0
