@@ -1,0 +1,18 @@
+require "fileutils"
+
+desc "bulid local files"
+task :local do
+  sh "mkdir -p page"
+  sh "haml -Eutf-8 src/index.haml -Isrc > page/index.html"
+  sh "ruby src/makejson.rb > page/data.json"
+end
+
+desc "show index.html"
+task :show => :local do
+  sh "open page/index.html"
+end
+
+desc "test solver"
+task :test do
+  ruby "src/solver_test.rb"
+end
