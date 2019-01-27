@@ -7,7 +7,7 @@ class SolverTest < Minitest::Test
       ["4,6,2,3/3", "TBD"],
     ].each do |src, expected|
       actual = solve( src )
-      assert_equal actual, expected, "src=#{src}"
+      assert_equal expected, actual, "src=#{src}"
     end
   end
 end
