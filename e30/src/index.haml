@@ -115,7 +115,7 @@
         %g{ "font-size"=>0.7, "font-family"=>"Arial Narrow", "text-anchor"=>"middle", fill:"black" }
           - layers.each.with_index do |layer,y|
             - 0.step(to:w, by:layer) do |x|
-              -fill = x/layer==m && y==layers.size-1 ? '#afa' : '#eee'
+              -fill = x/layer==m-1 && y==layers.size-1 ? '#afa' : '#eee'
               %rect{ width:layer-cg*2, height:1-cg*2, x:x+cg, y:y+cg, style:"fill:#{fill};stroke-width:0"}
               %text{ x:x+layer/2.0, y:y+0.7 }=cells.at(y,x/layer)
 

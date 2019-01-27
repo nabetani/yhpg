@@ -26,5 +26,5 @@ end
 def solve( src )
   wss, ms = src.split("/")
   ws = wss.split(",").map(&:to_i)
-  Cells.new(ws).at(ws.size-1, ms.to_i-1)
+  Cells.new(ws).at(ws.size-1, ms.to_i-1).to_s
 end
