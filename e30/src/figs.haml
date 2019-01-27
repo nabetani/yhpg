@@ -120,11 +120,14 @@
       -cg=0.05
       -cells = Cells.new(layers)
       -z = [1.5 / layers.min, 1].min
-      -left0 = [(m-1)*layers.last - w/z/2, 0].max
+      -left0 = [(m-0.5)*layers.last - w/z/2, 0].max
       %svg{ width:"#{tw}px", height:"#{th}px",  viewBox:"#{-gap} #{-gap} #{w+gap*2} #{h+gap*2}" }
         %g{ "font-size"=>0.7, "font-family"=>"Arial Narrow", "text-anchor"=>"middle", fill:"black" }
           - layers.each.with_index do |layer,y|
-            - 0.step(to:(w/z).ceil, by:layer) do |x|
+            - left = [(left0 / layer-1).round * layer,0].max
+            - right = left + (w/z).ceil + layer*2
+            - left.step(to:right, by:layer) do |x|
+              -gx = x - left0
               -fill = x/layer==m-1 && y==layers.size-1 ? '#afa' : '#eee'
-              %rect{ width:layer*z-cg*2, height:1-cg*2, x:x*z+cg, y:y+cg, style:"fill:#{fill};stroke-width:0"}
-              %text{ x:(x+layer/2.0)*z, y:y+0.7 }=cells.at(y,x/layer)
+              %rect{ width:layer*z-cg*2, height:1-cg*2, x:gx*z+cg, y:y+cg, style:"fill:#{fill};stroke-width:0"}
+              %text{ x:(gx+layer/2.0)*z, y:y+0.7 }=cells.at(y,x/layer)
