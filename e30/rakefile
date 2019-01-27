@@ -1,9 +1,14 @@
 require "fileutils"
 
+def haml( body )
+  sh "haml -Eutf-8 src/#{body}.haml -Isrc > page/#{body}.html"
+end
+
 desc "bulid local files"
 task :local do
   sh "mkdir -p page"
-  sh "haml -Eutf-8 src/index.haml -Isrc > page/index.html"
+  haml "index"
+  haml "figs"
   sh "ruby src/makejson.rb > page/data.json"
 end
 

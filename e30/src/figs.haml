@@ -17,8 +17,7 @@
         height:7em;
       }
       div.svg{
-       float:right;
-       background-color:white;
+        background-color:white;
       }
       ul * {
         line-height:160%;
@@ -98,16 +97,25 @@
         height:2em;
       }
   %body
+    %h1=TITLE
+  - SAMPLES.each.with_index(0) do |src,ix|
+    %h2
+      %a{ name:ix } ##{ix}
+    src:
+    %code=src
+    &nbsp;
+    expected:
+    %code=solve(src)
+    %br{clear:"all"}
     %div.svg
-      -src = S0
       -layers = src.split("/")[0].split(",").map(&:to_i)
       -m = src.split("/")[1].to_i
       -gap = 0.3
       -h = layers.size
-      -w = 20
+      -w = 30
       -ch=h+gap*2
       -cw=w+gap*2
-      -tw = 400
+      -tw = 800
       -th = tw * ch / cw
       -cg=0.05
       -cells = Cells.new(layers)
@@ -118,79 +126,3 @@
               -fill = x/layer==m && y==layers.size-1 ? '#afa' : '#eee'
               %rect{ width:layer-cg*2, height:1-cg*2, x:x+cg, y:y+cg, style:"fill:#{fill};stroke-width:0"}
               %text{ x:x+layer/2.0, y:y+0.7 }=cells.at(y,x/layer)
-
-
-    %h1=TITLE
-    %h2 問題の概要
-    %p
-      右図のように右に無限に長い領域が長方形(セル)に分割されている。
-    %h3 セルの幅
-    %p
-      セルの幅は、入力により指定される。
-    %h3 セルの値
-    %p
-      最上段は、左から順に 1, 2, 3, … の値が入っている。
-      %br
-      2段目より下は、上隣のセルに書かれた数の合計を 1000 で割った余り。
-    %p
-      となっている。
-    %h3 注目セル
-    %p
-      最下段の、左から m 番目のセルを「注目セル」と呼ぶ。
-      %br
-      注目セルに入る値を求めよ。
-    %h2 入力
-    %p
-      入力はこんな感じ：
-      %br
-      %code=S0
-      %br
-      スラッシュの前が、各段のセルの幅。上段から順にコンマ区切りで。
-      %br
-      スラッシュのあとは、m。つまり、注目セルの位置。
-      %br
-      m=1 は、左端が注目セルであることを意味する。
-    %h2 出力
-    %p
-      出力は、注目セルに入る値を 1000 で割ったあまり。
-      %br
-      そのままだとオーバーフローするかもしれないので、競技プログラミングっぽく剰余にしてみた。
-    %h2 補足
-    %ul
-      %li m は 1-origin であることに注意。
-      %li セルの幅は正の整数
-      - if QIITA_URL
-        %li
-          実装ができた方は
-          %a{ href:QIITA_URL }Qiitaの記事
-          のコメント欄からリンクを張っていただくと見つけやすくて助かります。
-      %li
-        この問題は#{EVENT_DATE.zip( %w(年 月 日) ).flatten.join}に開催される オフラインリアルタイムどう書く#{EVENT_ID} の#{REAL_Q ? "問題" : "参考問題"}です。イベントについては
-        %a{ href:EVENT_URL } Doorkeeper のページ
-        の方を御覧下さい。
-      -if ! REAL_Q
-        %li この問題と同程度の難易度の、簡単な問題を出す予定です。
-    %h2 サンプルデータ
-    %table.sample
-      %tr
-        %th #
-        %th 入力
-        %th 期待
-        %th 図へのリンク
-      - SAMPLES.each.with_index(0) do |src,ix|
-        %tr.sample
-          %td=ix
-          %td.sample
-            %code.src=src
-          %td
-            %code.expected=solve(src)
-          %td
-            %a{ href:"./figs.html##{ix}" } リンク
-    %h2 C/C++/Java 用のテストデータ
-    %textarea
-      -SAMPLES.each.with_index do |s,ix|
-        = %Q!/*%d*/ test( %s, %s );\n! % [ix, s.inspect, solve(s).inspect]
-
-    %h2 JSON 形式のテストデータ
-    %p
-      %a{ href:"data.json" } data.json
