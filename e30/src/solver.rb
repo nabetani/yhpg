@@ -12,7 +12,7 @@ class Cells
   end
 
   def _at(y,x)
-    return 2**(x+1) if y<=0
+    return x+1 if y<=0
     left0 = x*@ws[y]
     right0 = left0 + @ws[y]
 
