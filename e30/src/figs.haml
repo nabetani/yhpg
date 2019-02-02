@@ -129,6 +129,7 @@
             - right = left + (w/z).ceil + layer*2
             - left.step(to:right, by:layer) do |x|
               -gx = x - left0
-              -fill = x/layer==m-1 && y==layers.size-1 ? '#afa' : '#eee'
+              -fill = x/layer==m-1 && y==layers.size-1 ? '#afa' : nil
+              -fill ||= cells.interesting?(y,x/layer) ? '#eee' : '#aaa'
               %rect{ width:layer*z-cg*2, height:1-cg*2, x:gx*z+cg, y:y+cg, style:"fill:#{fill};stroke-width:0"}
               %text{ x:(gx+layer/2.0)*z, y:y+0.7 }=cells.at(y,x/layer)
