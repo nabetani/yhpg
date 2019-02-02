@@ -116,7 +116,8 @@
         %g{ "font-size"=>0.7, "font-family"=>"'Marvel', sans-serif", "text-anchor"=>"middle", fill:"black" }
           - layers.each.with_index do |layer,y|
             - 0.step(to:w, by:layer) do |x|
-              -fill = x/layer==m-1 && y==layers.size-1 ? '#afa' : '#eee'
+              -fill = x/layer==m-1 && y==layers.size-1 ? '#afa' : nil
+              -fill ||= cells.interesting?(y,x/layer) ? '#eee' : '#aaa'
               %rect{ width:layer-cg*2, height:1-cg*2, x:x+cg, y:y+cg, style:"fill:#{fill};stroke-width:0"}
               %text{ x:x+layer/2.0, y:y+0.7 }=cells.at(y,x/layer)
 
@@ -132,9 +133,17 @@
     %p
       最上段は、左から順に 1, 2, 3, … の値が入っている。
       %br
-      2段目より下は、上隣のセルに書かれた数の合計を 1000 で割った余り。
+      2段目より下は、上隣のセルに書かれた数のうち、面白いセル（後述）の合計を 1000 で割った余り。
     %p
       となっている。
+    %h3 面白いセル
+    %p
+      「面白いセル」は「面白くないセル」ではないセル。
+      %br
+      「面白くないセル」は、以下の条件を両方満たすセルのこと：
+    %ul
+      %li 両隣にセルがある。
+      %li 右隣も左隣も自分と同じ番号になっている。
     %h3 注目セル
     %p
       最下段の、左から m 番目のセルを「注目セル」と呼ぶ。
@@ -155,9 +164,9 @@
       m=1 は、左端が注目セルであることを意味する。
     %h2 出力
     %p
-      出力は、注目セルに入る値を 1000 で割ったあまり。
+      出力は、注目セルに入る値。
       %br
-      そのままだとオーバーフローするかもしれないので、競技プログラミングっぽく剰余にしてみた。
+      普通に10進数で。
     %h2 補足
     %ul
       %li m は 1-origin であることに注意。
