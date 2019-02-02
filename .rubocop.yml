@@ -1,6 +1,9 @@
 AllCops:
   TargetRubyVersion: 2.6
 
+Style/YodaCondition:
+  Enabled: false
+
 Style/MultilineBlockChain:
   Enabled: false
 
