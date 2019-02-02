@@ -1,0 +1,28 @@
+require "fileutils"
+
+def haml( body )
+  sh "haml -Eutf-8 src/#{body}.haml -Isrc > page/#{body}.html"
+end
+
+desc "bulid local files"
+task :local do
+  sh "mkdir -p page"
+  haml "index"
+  haml "figs"
+  sh "ruby src/makejson.rb > page/data.json"
+end
+
+desc "show index.html"
+task :show => :local do
+  sh "open page/index.html"
+end
+
+desc "test solver"
+task :test do
+  ruby "src/solver_test.rb"
+end
+
+desc "upload to the server"
+task :upload => :local do
+  ruby "../upload.rb orde30sumt"
+end

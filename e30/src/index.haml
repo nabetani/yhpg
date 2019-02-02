@@ -1,0 +1,209 @@
+-#coding:utf-8
+!!! 5
+-srand(0)
+-require "problem"
+%html
+  %head
+    %meta{ :charset=>'utf-8' }
+    %title=TITLE
+    :css
+      @import url('https://fonts.googleapis.com/css?family=Marvel');
+      body, textarea {
+        font-family: sans-serif;
+        font-size:11pt;
+      }
+      textarea {
+        font-size:7pt;
+        width:80%;
+        height:7em;
+      }
+      div.svg{
+       float:right;
+       background-color:white;
+      }
+      ul * {
+        line-height:160%;
+      }
+      td.center{ text-align:center; }
+      tr:nth-child(even) { background-color: #fafafa }
+      tr:nth-child(odd) { background-color: #f0f0f0 }
+      code {
+        background-color: #d8d8d8;
+        font-family:monospace;
+        padding:2pt 2pt 2pt 2pt ;
+        margin:1pt 1pt 1pt 1pt ;
+        border-radius:4px;
+      }
+      h1{
+        border-top : solid 2px #bbb;
+        border-left : solid 16px #bbb;
+        background-color: #f8f8f8;
+      }
+      h2{
+        border-top : solid 2px #bbb;
+        border-left : solid 8px #bbb;
+        background-color: #f8f8f8;
+      }
+      h3{
+        border-top : solid 1px #bbb;
+        border-left : solid 4px #bbb;
+        background-color: #f8f8f8;
+      }
+      h4{
+        background-color: #f8f8f8;
+      }
+      code.src, code.expected{
+        word-break: break-all;
+        font-family:"Ricty","Consolas","Courier New";
+      }
+      img.sample{
+        width:150px;
+        height:150px;
+      }
+      img.top{
+        width:320px;
+      }
+      .narrow{
+        font-family:"Ricty","Courier New";
+        font-size:9pt;
+      }
+      tr.sample{
+        height:2em;
+      }
+      td.sample{
+      }
+      table.outer > tbody > tr > td{
+        border-left: black solid 1px;
+        vertical-align:top;
+      }
+      table.tet tr{
+        background-color:white;
+      }
+      div.nabe{
+        float:right;
+        width:200px;
+        background-color:#eee;
+        text-align:center;
+      }
+      .nabe_c{
+        text-align:center;
+        }
+      div.main_fig{
+       float:right;
+       background-color:white;
+      }
+      th.width3em{
+        width:3em;
+      }
+      .height2em{
+        height:2em;
+      }
+  %body
+    %div.svg
+      -src = S0
+      -layers = src.split("/")[0].split(",").map(&:to_i)
+      -m = src.split("/")[1].to_i
+      -gap = 0.3
+      -h = layers.size
+      -w = 20
+      -ch=h+gap*2
+      -cw=w+gap*2
+      -tw = 400
+      -th = tw * ch / cw
+      -cg=0.05
+      -cells = Cells.new(layers)
+      %svg{ width:"#{tw}px", height:"#{th}px",  viewBox:"#{-gap} #{-gap} #{w+gap*2} #{h+gap*2}" }
+        %g{ "font-size"=>0.7, "font-family"=>"'Marvel', sans-serif", "text-anchor"=>"middle", fill:"black" }
+          - layers.each.with_index do |layer,y|
+            - 0.step(to:w, by:layer) do |x|
+              -fill = x/layer==m-1 && y==layers.size-1 ? '#afa' : nil
+              -fill ||= cells.interesting?(y,x/layer) ? '#eee' : '#aaa'
+              %rect{ width:layer-cg*2, height:1-cg*2, x:x+cg, y:y+cg, style:"fill:#{fill};stroke-width:0"}
+              %text{ x:x+layer/2.0, y:y+0.7 }=cells.at(y,x/layer)
+
+
+    %h1=TITLE
+    %h2 問題の概要
+    %p
+      右図のように右に無限に長い領域が長方形(セル)に分割されている。
+    %h3 セルの幅
+    %p
+      セルの幅は、入力により指定される。
+    %h3 セルの値
+    %p
+      最上段は、左から順に 1, 2, 3, … の値が入っている。
+      %br
+      2段目より下は、上隣のセルに書かれた数のうち、面白いセル（後述）の合計を 1000 で割った余り。
+    %p
+      となっている。
+    %h3 面白いセル
+    %p
+      「面白いセル」は「面白くないセル」ではないセル。
+      %br
+      「面白くないセル」は、以下の条件を両方満たすセルのこと：
+    %ul
+      %li 両隣にセルがある。
+      %li 右隣も左隣も自分と同じ番号になっている。
+    %h3 注目セル
+    %p
+      最下段の、左から m 番目のセルを「注目セル」と呼ぶ。
+      %br
+      m は、入力により指定される。
+      %br
+      注目セルに入る値を求めよ。
+    %h2 入力
+    %p
+      入力はこんな感じ：
+      %br
+      %code=S0
+      %br
+      スラッシュの前が、各段のセルの幅。上段から順にコンマ区切りで。
+      %br
+      スラッシュのあとは、m。つまり、注目セルの位置。
+      %br
+      m=1 は、左端が注目セルであることを意味する。
+    %h2 出力
+    %p
+      出力は、注目セルに入る値。
+      %br
+      普通に10進数で。
+    %h2 補足
+    %ul
+      %li m は 1-origin であることに注意。
+      %li 最上段のセルの値も 1-origin。
+      %li セルの幅は正の整数
+      - if QIITA_URL
+        %li
+          実装ができた方は
+          %a{ href:QIITA_URL }Qiitaの記事
+          のコメント欄からリンクを張っていただくと見つけやすくて助かります。
+      %li
+        この問題は#{EVENT_DATE.zip( %w(年 月 日) ).flatten.join}に開催される オフラインリアルタイムどう書く#{EVENT_ID} の#{REAL_Q ? "問題" : "参考問題"}です。イベントについては
+        %a{ href:EVENT_URL } Doorkeeper のページ
+        の方を御覧下さい。
+      -if ! REAL_Q
+        %li この問題と同程度の難易度の、簡単な問題を出す予定です。
+    %h2 サンプルデータ
+    %table.sample
+      %tr
+        %th #
+        %th 入力
+        %th 期待
+        %th 図へのリンク
+      - SAMPLES.each.with_index(0) do |src,ix|
+        %tr.sample
+          %td=ix
+          %td.sample
+            %code.src=src
+          %td
+            %code.expected=solve(src)
+          %td
+            %a{ href:"./figs.html##{ix}" } リンク
+    %h2 C/C++/Java 用のテストデータ
+    %textarea
+      -SAMPLES.each.with_index do |s,ix|
+        = %Q!/*%d*/ test( %s, %s );\n! % [ix, s.inspect, solve(s).inspect]
+
+    %h2 JSON 形式のテストデータ
+    %p
+      %a{ href:"data.json" } data.json
