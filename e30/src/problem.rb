@@ -4,7 +4,7 @@ EVENT_ID="E30"
 REAL_Q=true # 本番 / 参考
 EVENT_DATE=[2019,2,2]
 EVENT_URL="https://yhpg.doorkeeper.jp/events/84247"
-QIITA_URL = nil
+QIITA_URL = "https://qiita.com/Nabetani/items/725e09cc5913a8569c04"
 TITLE="面白いセルの合計 #{EVENT_DATE.join(".")}"
 
 S0="4,6,1,5/3"
