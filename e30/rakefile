@@ -21,3 +21,8 @@ desc "test solver"
 task :test do
   ruby "src/solver_test.rb"
 end
+
+desc "upload to the server"
+task :upload => :local do
+  ruby "../upload.rb"
+end
