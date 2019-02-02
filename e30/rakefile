@@ -24,5 +24,5 @@ end
 
 desc "upload to the server"
 task :upload => :local do
-  ruby "../upload.rb"
+  ruby "../upload.rb orde30sumt"
 end

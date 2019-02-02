@@ -2,7 +2,7 @@ require 'net/ftp'
 require_relative '../ftp_password'
 
 HENA='/home/nabetani/www/hena/'
-DIR="orde30sumt"
+DIR=ARGV[0]
 
 src="./page"
 Net::FTP.open('nabetani.sakura.ne.jp', "nabetani", FTP_PASSWORD) do |ftp|
