@@ -2,7 +2,7 @@
 
 def random_cases
   [*2..36].map{ |b|
-    [*1..50000].shuffle.take(100).map{ |n| [b,n].join(",") }
+    [*1..50000].shuffle.take(100).map{ |n| [b,n.to_s(b)].join(",") }
   }.flatten
 end
 
@@ -17,6 +17,6 @@ TESTCASES = [
   "10,1122",
   "10,1234",
   "10,789",
-  "2,10",
-  "4,828",
+  "2,1010",
+  "4,30330",
 ] + random_cases

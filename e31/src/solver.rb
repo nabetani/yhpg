@@ -62,8 +62,9 @@ def solve_impl(b,digits)
 end
 
 def solve( src )
-  b,n = src.split(",").map(&:to_i)
-  digits = (n+1).digits(b).reverse
+  sb,n = src.split(",")
+  b = sb.to_i
+  digits = (n.to_i(b)+1).digits(b).reverse
   solve_impl(b, digits).map{ |e| DIGITS[e] }.join
 end
 

@@ -15,13 +15,14 @@ def solve_slow_impl( b, n )
 end
 
 def solve_slow(src)
-  solve_slow_impl( *src.split(",").map(&:to_i) )
+  sb, n = src.split(",")
+  b = sb.to_i
+  solve_slow_impl( b, n.to_i(b))
 end
 
 if __FILE__==$PROGRAM_NAME
   TESTCASES.each do |src|
-    b,n = src.split(",").map(&:to_i)
-    digit = n.to_s(b)
-    puts( "%s ( %s ) -> %s" % [src, digit, solve_slow(src)] )
+    _,n = src.split(",")
+    puts( "%s ( %s ) -> %s" % [src, n, solve_slow(src)] )
   end
 end
