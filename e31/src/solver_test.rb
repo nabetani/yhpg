@@ -2,30 +2,21 @@
 
 require 'minitest/autorun'
 require_relative "solver"
-
-def guru?(x,b)
-  x.digits(b).each_cons(2).all?{ |p,q|
-    p==q || p==(q+1)%b
-  }
-end
-
-def solve_slow_impl( b, n )
-  ((n+1)..).find{ |x|
-    guru?(x,b)
-  }.to_s(b)
-end
-
-def solve_slow(src)
-  solve_slow_impl( *src.split(",").map(&:to_i) )
-end
+require_relative "solve_slow"
 
 class SolverTest < Minitest::Test
   def test_samples
     [
+      "2,10",
       "10,100",
       "10,122",
       "10,123",
-      "10,123",
+      "10,124",
+      "10,998",
+      "10,999",
+      "10,1122",
+      "10,1234",
+      "10,789",
     ].each do |src|
       expected = solve_slow(src)
       actual = solve( src )
