@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+def random_cases
+  [*2..36].map{ |b|
+    [*1..50000].shuffle.take(100).map{ |n| [b,n].join(",") }
+  }.flatten
+end
+
 TESTCASES = [
   "10,123123",
   "10,100",
@@ -12,4 +18,5 @@ TESTCASES = [
   "10,1234",
   "10,789",
   "2,10",
-]
+  "4,828",
+] + random_cases
