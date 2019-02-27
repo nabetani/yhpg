@@ -69,7 +69,7 @@ def solve( src )
 end
 
 if __FILE__==$PROGRAM_NAME
-  [ "4,828" ].each do |src|
+  [ "4,30330" ].each do |src|
     b,n = src.split(",").map(&:to_i)
     digit = n.to_s(b)
     puts( "%s ( %s ) -> %s" % [src, digit, solve(src)] )
