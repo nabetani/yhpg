@@ -7,7 +7,7 @@ EVENT_URL="https://yhpg.doorkeeper.jp/events/86766"
 QIITA_URL = nil
 TITLE="ぐるぐる数 #{EVENT_DATE.join(".")}"
 
-S0="4,6,1,5/3"
+S0="4,11230330"
 
 srand(0)
 
@@ -61,7 +61,29 @@ NUMSAMPLES = [
   make_no_guru(36,2),
 ]
 
+def candidate(b)
+  exp = rand(51)
+  n=rand(2**exp)+1
+  [b,n.to_s(b)].join(",")
+end
+
 SAMPLES = [
   S0
 ] + [
-]
+  %w( 
+    10,1
+    10,9
+    10,11111
+    10,123456
+    10,99999
+    10,9998999
+    10,89012
+  ),
+  "2,#{(rand(1000)+1).to_s(2)}",
+  "2,#{(rand(1000)+1).to_s(2)}",
+  (3..36).map{ |b|
+    Array.new(300){ candidate(b) }.max_by{ |s|
+      solve(s).chars.each_cons(2).select{ |x,y| x!=y }.count
+    }
+  }
+].flatten
