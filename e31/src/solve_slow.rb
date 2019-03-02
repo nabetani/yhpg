@@ -22,6 +22,18 @@ def solve_slow(src)
 end
 
 if __FILE__==$PROGRAM_NAME
+  if ARGV[0]=="makesample"
+    %w(
+      10,123,4567
+      7,123,4560
+      19,123,abcd
+      2,1010,10101010
+      3,1010,10101010
+    ).each do |src|
+      puts( %Q!dataType{src:"#{src}", expected:"#{solve_slow(src)}"},! )
+    end
+    exit
+  end
   TESTCASES.take(20).each do |src|
     _,n = src.split(",")
     puts( "%s ( %s ) -> %s" % [src, n, solve_slow(src)] )
