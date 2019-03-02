@@ -8,20 +8,21 @@ def guru?(x,b)
   }
 end
 
-def solve_slow_impl( b, n )
-  ((n+1)..).find{ |x|
-    guru?(x,b)
-  }.to_s(b)
+def solve_slow_impl( b, x, y )
+  (x..y).count{ |e|
+    guru?(e,b)
+  }
 end
 
 def solve_slow(src)
-  sb, n = src.split(",")
+  sb, sx, sy = src.split(",")
   b = sb.to_i
-  solve_slow_impl( b, n.to_i(b))
+  x, y = [sx,sy].map{ |e| e.to_i(b) }
+  solve_slow_impl( b, x, y ).to_s
 end
 
 if __FILE__==$PROGRAM_NAME
-  TESTCASES.each do |src|
+  TESTCASES.take(20).each do |src|
     _,n = src.split(",")
     puts( "%s ( %s ) -> %s" % [src, n, solve_slow(src)] )
   end
