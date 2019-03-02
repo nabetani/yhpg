@@ -139,6 +139,9 @@ SAMPLES = [
   "4,10030022033,10203020123103",
   "10,3268665,134217728",
   "36,6pku,27wr28",
+  "35,6n89a,j1dlik",
+  "34,7gehm,m0anuo",
+  "11,571016a,47352388a",
   rand_samples1,
   rand_samples2,
 ].flatten.sort_by{ |x| [solve(x).to_i, x.size, x] }
