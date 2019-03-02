@@ -121,33 +121,52 @@
         %tr
           %th=b
           %td=snum
-          %td=guru_string?(b,snum) ? "TRUE" : "false"
+          %td=guru_string?(b,snum) ? "<b>TRUE</b>" : "false"
       %tr
 
     %p
-      b と 正の整数 n を一つ与える。
+      b と、2つの数 x, y を与える。 
       %br
-      n より大きな「
+      x以上で y以下の「
       b 進数の
       %b ぐるぐる数
-      」として最小のものを求めよ。
+      」が何個あるのか計算せよ。
     %h2 入力
     %p
       入力はこんな感じ：
       %br
       %code=S0
       %br
-      コンマの前が b 。何進数か。
+      b, x, y がコンマ区切りで並んでいる。
       %br
-      コンマの後が n 。n は b進数表示になっている。nより大きな数を探す。
+      b は 十進数。
+      %br
+      x と y は b 進数になっている。
     %h2 出力
     %p
-      出力は、n より大きな「b 進数の
+      出力は x 以上 y 以下の「b 進数の
       %b ぐるぐる数
-      」を。b 進数で。
+      」の個数を 十進数 で。
+    %p
+      上記の例だと
+      %br
+      &nbsp;
+      =gurus(S0).join(", ")
+      %br
+      の
+      =solve(S0)
+      個の「
+      =S0.split(",")[0]
+      進数の
+      %b ぐるぐる数
+      」があるので
+      %br
+      %code=solve(S0)
+      %br
+      を出力すればよい。
+
     %h2 補足
     %ul
-      %li セルの幅は正の整数
       - if QIITA_URL
         %li
           実装ができた方は

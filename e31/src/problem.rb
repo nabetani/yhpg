@@ -1,4 +1,5 @@
 require_relative "solver"
+require_relative "solve_slow"
 
 EVENT_ID="E31"
 REAL_Q=true # 本番 / 参考
@@ -7,9 +8,16 @@ EVENT_URL="https://yhpg.doorkeeper.jp/events/86766"
 QIITA_URL = nil
 TITLE="ぐるぐる数 #{EVENT_DATE.join(".")}"
 
-S0="4,11230330"
+S0="4,1313,3012"
 
 srand(0)
+
+def gurus(src)
+  sb, sx, sy = src.split(",")
+  b = sb.to_i
+  x, y = [sx,sy].map{ |e| e.to_i(b) }
+  (x..y).select{ |e| guru?(e,b) }.map{ |e| e.to_s(b) }
+end
 
 def make_guru(b, len)
   f=lambda do
@@ -70,20 +78,4 @@ end
 SAMPLES = [
   S0
 ] + [
-  %w( 
-    10,1
-    10,9
-    10,11111
-    10,123456
-    10,99999
-    10,9998999
-    10,89012
-  ),
-  "2,#{(rand(1000)+1).to_s(2)}",
-  "2,#{(rand(1000)+1).to_s(2)}",
-  (3..36).map{ |b|
-    Array.new(300){ candidate(b) }.max_by{ |s|
-      solve(s).chars.each_cons(2).select{ |x,y| x!=y }.count
-    }
-  }
 ].flatten
