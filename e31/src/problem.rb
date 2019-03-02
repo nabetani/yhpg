@@ -1,3 +1,4 @@
+require "yen"
 require_relative "solver"
 require_relative "solve_slow"
 
@@ -9,6 +10,8 @@ QIITA_URL = nil
 TITLE="ぐるぐる数 #{EVENT_DATE.join(".")}"
 
 S0="4,1313,3012"
+
+MAX_Y = 10**9
 
 srand(0)
 
@@ -151,6 +154,6 @@ SAMPLES.each{ |s|
   raise s unless x.to_s(b)==sx
   raise s unless y.to_s(b)==sy
   raise s unless x<=y
-  raise s unless y<=2**52
+  raise s unless y<=MAX_Y
   raise s unless 0<x
 }
