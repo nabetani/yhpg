@@ -75,7 +75,29 @@ def candidate(b)
   [b,n.to_s(b)].join(",")
 end
 
+def rand_samples( bvalues, erange, seed )
+  rng = Random.new(seed)
+  bvalues.map{ |b|
+    e = rng.rand(erange)
+    max = 2**e
+    hi = rng.rand((max/2)..max)
+    lo = rng.rand((hi/4)..(hi/2))
+    [b,*[lo,hi].map{ |e| e.to_s(b) }].join(",")
+  }
+end
+
 SAMPLES = [
   S0
 ] + [
-].flatten
+  "2,1,1",
+  "36,1,z",
+  "10,100,110",
+  "5,3401,40123",
+  "2,1010010110110110000110101,11010111001011110110110101",
+  "3,22111101011101,11021122211120221",
+  "4,10030022033,10203020123103",
+  "10,3268665,134217728",
+  "36,6pku,27wr28",
+  rand_samples( 2.step(36,3), 4..13, 1 ),
+  rand_samples( 2..36, 14..20, 2 ),
+].flatten.sort_by{ |x| [solve(x).to_i, x.size, x] }
