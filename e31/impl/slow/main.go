@@ -11,19 +11,19 @@ import (
 )
 
 func isGuru(b, i int32) bool {
-	prev := (*int32)(nil)
+	prev := int32(-1)
 	for {
 		num := i % b
 		i = (i - num) / b
-		if prev != nil {
-			if *prev != num && *prev != (num+1)%b {
+		if 0 <= prev {
+			if prev != num && prev != (num+1)%b {
 				return false
 			}
 		}
 		if i == 0 {
 			return true
 		}
-		prev = &num
+		prev = num
 	}
 }
 
