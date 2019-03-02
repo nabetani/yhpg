@@ -1,20 +1,14 @@
 # frozen_string_literal: true
 
-
 def state(b, x)
   x.each_cons(2).map{ |prev,cur|
-    lo, hi = [ prev, (prev+1) % b ].sort
-    if cur<lo
-      :below
-    elsif cur==lo
-      :lo
-    elsif cur<hi
-      :mid
-    elsif cur==hi
-      :hi
-    else
-      :above
-    end
+    lambda{ |lo,hi|
+      return :below if cur<lo
+      return :lo if cur==lo
+      return :mid if cur<hi
+      return :hi if cur==hi
+      return :above
+    }[*[ prev, (prev+1) % b ].sort]
   }
 end
 
@@ -31,7 +25,6 @@ end
 
 # x 以下の ぐるぐる数の個数
 def guru_count( b, x )
-  return x[0] if x.size==1
   # x.size 未満の桁数
   s0 = (1..(x.size-1)).sum{ |keta| (b-1)*(2**(keta-1)) }
   # x.size 桁で、先頭が 1..(x.first-1)
