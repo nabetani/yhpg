@@ -2,12 +2,6 @@
 
 require "json"
 
-DIGITS=[*"0".."9", *"a".."z"]
-
-def number(r)
-  r.map{ |e| DIGITS[e] }.join
-end
-
 def build_number(b, head, size, states)
   r=[head]
   (size-1).times do |ix|
@@ -63,16 +57,34 @@ def guru(b,digits)
   end
 end
 
+def sup(b,x)
+  undigits(b, guru(b, x.digits(b).reverse).reverse)
+end
+
+def solve_impl( b, x, y )
+  x = sup(b,x)
+  count = 0
+  while x<=y
+    count+=1
+    x = sup(b,x+1)
+  end
+  count
+end
+
 def solve( src )
-  b,n = src.split(",").map(&:to_i)
-  digits = (n+1).digits(b).reverse
-  guru(b, digits).map{ |e| DIGITS[e] }.join
+  sb, sx, sy = src.split(",")
+  b = sb.to_i
+  if b==2
+    (sy.to_i(2) - sx.to_i(2)+1).to_s
+  else
+    solve_impl( b, sx.to_i(b), sy.to_i(b) ).to_s
+  end
 end
 
 if __FILE__==$PROGRAM_NAME
   json = JSON.parse( File.open( "../page/data.json" ){ |f| f.read }, symbolize_names:true )
   json[:test_data].each do |number:, src:, expected:|
     actual = solve( src )
-    p [ number, src, expected, actual ]
+    p [ (expected==actual ? "ok" : "**NG**"), number, src, expected, actual ]
   end
 end
