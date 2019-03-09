@@ -2,46 +2,30 @@
 
 require "json"
 
+def next_vals(b,n)
+  [n, (n+1)%b]
+end
+
 def build_number(b, head, size, states)
   (size-1).times.with_object([head]) do |ix,o|
-    p = o.last
-    candidates = [ p, (p+1) % b ].sort
-    o.push candidates[
-      [nil, :below, :low].include?(states[ix]) ? 0 : 1
-    ]
+    candidates = next_vals(b, o.last).sort
+    o.push candidates[:low==states[ix] ? 0 : 1]
   end
 end
 
 def undigits(b,d)
-  r=0
-  d.reverse_each do |n|
-    r*=b
-    r+=n
+  d.reverse_each.inject(0) do |acc,n|
+    acc*b+n
   end
-  r
 end
 
 def build_states(b, digits)
-  ignore=false
-  digits.each_cons(2).map{ |p,q|
-    candidates = [ p, (p+1) % b ].sort
-    if ignore
-      nil
-    elsif q<candidates[0]
-      ignore=true
-      :below
-    elsif q==candidates[0]
-      :low
-    elsif q<candidates[1]
-      ignore=true
-      :mid
-    elsif q==candidates[1]
-      :high
-    else
-      ignore=true
-      :above
-    end
+  r=digits.each_cons(2).with_object([]){ |(p,q),o|
+    candidates = next_vals( b, p )
+    o << %i(low high above)[candidates.count{ |e| e<q }]
+    break o unless candidates.include?(q)
   }
+  r + [:low]*(digits.size-1-r.size)
 end
 
 def guru(b,digits)
@@ -52,7 +36,7 @@ def guru(b,digits)
     n = undigits(b,digits[0,above+1].reverse)
     d = (n+1).digits(b).reverse
     head = guru(b,d)
-    num = [ head.last, (head.last+1) % b ].min
+    num = next_vals( b, head.last).min
     head + [num] * (digits.size-above-1)
   else
     build_number(b, digits.first, digits.size, states)
