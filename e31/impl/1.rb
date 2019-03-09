@@ -36,8 +36,7 @@ def guru(b,digits)
   n = undigits(b,digits[0,above+1].reverse)
   d = (n+1).digits(b).reverse
   head = guru(b,d)
-  num = next_vals( b, head.last).min
-  head + [num] * (digits.size-above-1)
+  head + [next_vals( b, head.last).min] * (digits.size-above-1)
 end
 
 def sup(b,x)
