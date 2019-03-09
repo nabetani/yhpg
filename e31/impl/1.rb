@@ -67,8 +67,10 @@ end
 if __FILE__==$PROGRAM_NAME
   json = File.open( "../page/data.json", &:read)
   data = JSON.parse( json, symbolize_names:true )
-  data[:test_data].each do |number:, src:, expected:|
+  data[:test_data].map{ |number:, src:, expected:|
     actual = solve( src )
-    p [ (expected==actual ? "ok" : "**NG**"), number, src, expected, actual ]
-  end
+    ok = expected==actual
+    p [ (ok ? "ok" : "**NG**"), number, src, expected, actual ]
+    ok
+  }.tap{ |r| puts( r.all? ? "everything is okay" : "something wrong" ) }
 end
