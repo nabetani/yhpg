@@ -3,29 +3,27 @@
 require "json"
 
 def build_number(b, head, size, states)
-  r=[head]
-  (size-1).times do |ix|
-    p = r.last
+  (size-1).times.with_object([head]) do |ix,o|
+    p = o.last
     candidates = [ p, (p+1) % b ].sort
-    r.push candidates[
+    o.push candidates[
       [nil, :below, :low].include?(states[ix]) ? 0 : 1
     ]
   end
-  r
 end
 
 def undigits(b,d)
   r=0
-  d.reverse.each do |n|
+  d.reverse_each do |n|
     r*=b
     r+=n
   end
   r
 end
 
-def guru(b,digits)
+def build_states(b, digits)
   ignore=false
-  states = digits.each_cons(2).map{ |p,q|
+  digits.each_cons(2).map{ |p,q|
     candidates = [ p, (p+1) % b ].sort
     if ignore
       nil
@@ -44,14 +42,18 @@ def guru(b,digits)
       :above
     end
   }
+end
+
+def guru(b,digits)
+  states = build_states(b, digits)
   above = states.index(:above)
   if above
+    # 繰り上がり処理がある
     n = undigits(b,digits[0,above+1].reverse)
     d = (n+1).digits(b).reverse
     head = guru(b,d)
     num = [ head.last, (head.last+1) % b ].min
-    tail = [num] * (digits.size-above-1)
-    head+tail
+    head + [num] * (digits.size-above-1)
   else
     build_number(b, digits.first, digits.size, states)
   end
