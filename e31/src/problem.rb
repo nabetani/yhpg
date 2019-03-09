@@ -6,7 +6,7 @@ EVENT_ID="E31"
 REAL_Q=true # 本番 / 参考
 EVENT_DATE=[2019,3,9]
 EVENT_URL="https://yhpg.doorkeeper.jp/events/86766"
-QIITA_URL = nil
+QIITA_URL =  "https://qiita.com/Nabetani/items/d139d5ef70aa23c2d038"
 TITLE="ぐるぐる数 #{EVENT_DATE.join(".")}"
 
 S0="4,1313,3012"
