@@ -1,0 +1,203 @@
+-#coding:utf-8
+!!! 5
+-srand(0)
+-require "problem"
+%html
+  %head
+    %meta{ :charset=>'utf-8' }
+    %title=TITLE
+    :css
+      body, textarea {
+        font-family: sans-serif;
+        font-size:11pt;
+      }
+      textarea {
+        font-size:7pt;
+        width:80%;
+        height:7em;
+      }
+      div.svg{
+       float:right;
+       background-color:white;
+      }
+      ul * {
+        line-height:160%;
+      }
+      td.center{ text-align:center; }
+      tr:nth-child(even) { background-color: #fafafa }
+      tr:nth-child(odd) { background-color: #f0f0f0 }
+      code {
+        background-color: #d8d8d8;
+        font-family:monospace;
+        padding:2pt 2pt 2pt 2pt ;
+        margin:1pt 1pt 1pt 1pt ;
+        border-radius:4px;
+      }
+      h1{
+        border-top : solid 2px #bbb;
+        border-left : solid 16px #bbb;
+        background-color: #f8f8f8;
+      }
+      h2{
+        border-top : solid 2px #bbb;
+        border-left : solid 8px #bbb;
+        background-color: #f8f8f8;
+      }
+      h3{
+        border-top : solid 1px #bbb;
+        border-left : solid 4px #bbb;
+        background-color: #f8f8f8;
+      }
+      h4{
+        background-color: #f8f8f8;
+      }
+      code.src, code.expected{
+        word-break: break-all;
+        font-family:"Ricty","Consolas","Courier New";
+      }
+      img.sample{
+        width:150px;
+        height:150px;
+      }
+      img.top{
+        width:320px;
+      }
+      .narrow{
+        font-family:"Ricty","Courier New";
+        font-size:9pt;
+      }
+      tr.sample{
+        height:2em;
+      }
+      td.sample{
+      }
+      table.outer > tbody > tr > td{
+        border-left: black solid 1px;
+        vertical-align:top;
+      }
+      table.tet tr{
+        background-color:white;
+      }
+      div.nabe{
+        float:right;
+        width:200px;
+        background-color:#eee;
+        text-align:center;
+      }
+      .nabe_c{
+        text-align:center;
+        }
+      div.main_fig{
+       float:right;
+       background-color:white;
+      }
+      th.width3em{
+        width:3em;
+      }
+      .height2em{
+        height:2em;
+      }
+  %body
+    %h1=TITLE
+    %h2 問題の概要
+    %p
+      ある数を b 進数で表現する。
+      %br
+      このとき、左端を除くすべての桁が以下の条件を満たす数のことを「
+      %b ぐるぐる数
+      」と呼ぶ：
+    %ul
+      %li 左隣の桁と等しい
+      %li ( 左隣の桁の数字 +1 ) % b と等しい ( ※ “%” は剰余の計算 )
+    %p
+      例を挙げる：
+    %table
+      %tr
+        %th b
+        %th 数(b進数表記)
+        %th ぐるぐる数？
+      -NUMSAMPLES.each do |b,snum|
+        %tr
+          %th=b
+          %td=snum
+          %td=guru_string?(b,snum) ? "<b>TRUE</b>" : "false"
+      %tr
+
+    %p
+      b と、2つの数 x, y を与える。 
+      %br
+      x以上で y以下の「
+      b 進数の
+      %b ぐるぐる数
+      」が何個あるのか計算せよ。
+    %h2 入力
+    %p
+      入力はこんな感じ：
+      %br
+      %code=S0
+      %br
+      b, x, y がコンマ区切りで並んでいる。
+      %br
+      b は 十進数。
+      %br
+      x と y は b 進数になっている。
+    %h2 出力
+    %p
+      出力は x 以上 y 以下の「b 進数の
+      %b ぐるぐる数
+      」の個数を 十進数 で。
+    %p
+      上記の例だと
+      %br
+      &nbsp;
+      =gurus(S0).join(", ")
+      %br
+      の
+      =solve(S0)
+      個の「
+      =S0.split(",")[0]
+      進数の
+      %b ぐるぐる数
+      」があるので
+      %br
+      %code=solve(S0)
+      %br
+      を出力すればよい。
+
+    %h2 補足
+    %ul
+      %li 1≦x≦y である。
+      %li y の上限は、まあサンプルデータにあるぐらいの感じで。
+      %li 2≦b≦36 である。
+      - if QIITA_URL
+        %li
+          実装ができた方は
+          %a{ href:QIITA_URL }Qiitaの記事
+          のコメント欄からリンクを張っていただくと見つけやすくて助かります。
+      %li
+        この問題は#{EVENT_DATE.zip( %w(年 月 日) ).flatten.join}に開催される オフラインリアルタイムどう書く#{EVENT_ID} の#{REAL_Q ? "問題" : "参考問題"}です。イベントについては
+        %a{ href:EVENT_URL } Doorkeeper のページ
+        の方を御覧下さい。
+      -if ! REAL_Q
+        %li この問題と同程度の難易度の、簡単な問題を出す予定です。
+    %h2 サンプルデータ
+    %table.sample
+      %tr
+        %th #
+        %th 入力
+        %th 期待
+      - SAMPLES.each.with_index(0) do |src,ix|
+        %tr.sample
+          %td=ix
+          %td.sample
+            %code.src=src
+          %td
+            %code.expected=solve(src)
+    %h2 C/C++/Java 用のテストデータ
+    %textarea
+      -SAMPLES.each.with_index do |s,ix|
+        = %Q!/*%d*/ test( %s, %s );\n! % [ix, s.inspect, solve(s).inspect]
+
+    %h2 JSON 形式のテストデータ
+    %p
+      %a{ href:"data.json" } data.json

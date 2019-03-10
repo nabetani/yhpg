@@ -54,3 +54,6 @@ Naming/UncommunicativeMethodParamName:
 
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
+
+Style/PercentLiteralDelimiters:
+  Enabled: false
