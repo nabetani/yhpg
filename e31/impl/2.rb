@@ -47,7 +47,7 @@ def solve( src )
 end
 
 if __FILE__==$PROGRAM_NAME
-  json = File.open( "../page/data.json", &:read)
+  json = File.open( ARGV[0], &:read)
   data = JSON.parse( json, symbolize_names:true )
   data[:test_data].map{ |number:, src:, expected:|
     actual = solve( src )
