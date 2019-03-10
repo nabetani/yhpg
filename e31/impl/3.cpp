@@ -1,55 +1,47 @@
-// clang++ -O2 -std=c++17 -Wall 3.cpp
+// clang++ -O2 -std=c++17 -Wall -Xpreprocessor -fopenmp -lomp  3.cpp
 
-#include <iostream>
-#include <string>
-#include <regex>
-#include <numeric>
-#include <sstream>
 #include <iomanip>
+#include <iostream>
+#include <numeric>
+#include <regex>
+#include <sstream>
+#include <string>
 
-bool is_guru(int b, int i){
-  auto prev{ -1 };
-  for(;;){
+int is_guru(int b, int i) {
+  auto prev{-1};
+  for (;;) {
     auto num = i % b;
-    if ( 0<=prev && prev != num && prev != (num+1)%b ){
-      return false;
+    if (0 <= prev && prev != num && prev != (num + 1) % b) {
+      return 0;
     }
-    i = (i-num) / b;
-    if ( i==0 ){
-      return true;
+    i = (i - num) / b;
+    if (i == 0) {
+      return 1;
     }
     prev = num;
   }
 }
 
-std::string solve( std::string const & src ){
-  auto regex = std::regex( R"(^([^\,]+)\,([^\,]+)\,([^\,]+))" );
+std::string solve(std::string const &src) {
+  auto regex = std::regex(R"(^([^\,]+)\,([^\,]+)\,([^\,]+))");
   std::smatch m;
-  auto match = std::regex_match( src, m, regex );
+  std::regex_match(src, m, regex);
   auto b = std::stoi(m[1]);
   auto x = std::strtol(m[2].str().c_str(), nullptr, b);
   auto y = std::strtol(m[3].str().c_str(), nullptr, b);
-  int count=0;
-  for( int i=x ; i<=y ; ++i ){
-    if ( is_guru(b, i) ){
-      ++count;
-    }
+  int count = 0;
+#pragma omp parallel for reduction(+ : count)
+  for (int i = x; i <= y; ++i) {
+    count += is_guru(b, i);
   }
   return std::to_string(count);
 }
 
-void test( std::string const & src, std::string const & expected ){
-  auto actual{ solve( src ) };
-  auto okay{ actual == expected };
-  std::cout
-    << (okay ? "ok" : "**NG**" )
-    << " "
-    << src
-    << " "
-    << actual
-    << " "
-    << expected
-    << std::endl;
+void test(std::string const &src, std::string const &expected) {
+  auto actual{solve(src)};
+  auto okay{actual == expected};
+  std::cout << (okay ? "ok" : "**NG**") << " " << src << " " << actual << " "
+            << expected << std::endl;
 }
 
 int main() {
