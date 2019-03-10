@@ -14,10 +14,8 @@ func isGuru(b, i int32) bool {
 	prev := int32(-1)
 	for {
 		num := i % b
-		if 0 <= prev {
-			if prev != num && prev != (num+1)%b {
-				return false
-			}
+		if 0 <= prev && prev != num && prev != (num+1)%b {
+			return false
 		}
 		i = (i - num) / b
 		if i == 0 {
