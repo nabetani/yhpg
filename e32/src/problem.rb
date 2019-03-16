@@ -20,11 +20,11 @@ Rect = Struct.new( :x, :y, :right, :bottom ) do
   end
 
   def w
-    bottom-y
+    right-x
   end
 
   def h
-    right-x
+    bottom-y
   end
 end
 
