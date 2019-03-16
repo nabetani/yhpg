@@ -7,7 +7,7 @@ EVENT_URL="https://yhpg.doorkeeper.jp/events/88379"
 QIITA_URL = nil
 TITLE="きれいな四角 #{EVENT_DATE.join(".")}"
 
-S0="11,22,33,44/55,66,77,88"
+S0="11,22,33,44/55,66,77,88/20,30,99,99"
 
 Rect = Struct.new( :x, :y, :right, :bottom ) do
   def initialize( *src )
