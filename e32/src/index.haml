@@ -115,8 +115,7 @@
         %g{ "font-size"=>0.7, "font-family"=>"'Marvel', sans-serif", "text-anchor"=>"middle", fill:"black" }
           -src.split("/").each do |srect|
             -rect = Rect.new(srect)
-            -fill = rand<0.5 ? "#f0f" : "#0f0"
-            %rect{ width:rect.w, height:rect.h, x:rect.x+gap, y:rect.y+gap, style:"fill:#{fill};stroke-width:#{stroke_w}", stroke:"black"}
+            %rect{ width:rect.w, height:rect.h, x:rect.x+gap, y:rect.y+gap, style:"fill:none;stroke-width:#{stroke_w}", stroke:"black"}
 
     %h1=TITLE
     %h2 問題の概要
