@@ -110,7 +110,7 @@
       -cw=w+gap*2
       -tw = 400
       -stroke_w = 1.0*ch/tw
-      -th = tw * ch / cw
+      -th = 1.0*tw * ch / cw
       %svg{ width:"#{tw}px", height:"#{th}px",  viewBox:"#{-gap} #{-gap} #{w+gap*2} #{h+gap*2}" }
         %g{ "font-size"=>0.7, "font-family"=>"'Marvel', sans-serif", "text-anchor"=>"middle", fill:"black" }
           -src.split("/").each do |srect|
