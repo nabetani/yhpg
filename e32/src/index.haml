@@ -1,0 +1,187 @@
+-#coding:utf-8
+!!! 5
+-srand(0)
+-require "problem"
+%html
+  %head
+    %meta{ :charset=>'utf-8' }
+    %title=TITLE
+    :css
+      @import url('https://fonts.googleapis.com/css?family=Marvel');
+      body, textarea {
+        font-family: sans-serif;
+        font-size:11pt;
+      }
+      textarea {
+        font-size:7pt;
+        width:80%;
+        height:7em;
+      }
+      div.svg{
+       float:right;
+       background-color:white;
+      }
+      ul * {
+        line-height:160%;
+      }
+      td.center{ text-align:center; }
+      tr:nth-child(even) { background-color: #fafafa }
+      tr:nth-child(odd) { background-color: #f0f0f0 }
+      code {
+        background-color: #d8d8d8;
+        font-family:monospace;
+        padding:2pt 2pt 2pt 2pt ;
+        margin:1pt 1pt 1pt 1pt ;
+        border-radius:4px;
+      }
+      h1{
+        border-top : solid 2px #bbb;
+        border-left : solid 16px #bbb;
+        background-color: #f8f8f8;
+      }
+      h2{
+        border-top : solid 2px #bbb;
+        border-left : solid 8px #bbb;
+        background-color: #f8f8f8;
+      }
+      h3{
+        border-top : solid 1px #bbb;
+        border-left : solid 4px #bbb;
+        background-color: #f8f8f8;
+      }
+      h4{
+        background-color: #f8f8f8;
+      }
+      code.src, code.expected{
+        word-break: break-all;
+        font-family:"Ricty","Consolas","Courier New";
+      }
+      img.sample{
+        width:150px;
+        height:150px;
+      }
+      img.top{
+        width:320px;
+      }
+      .narrow{
+        font-family:"Ricty","Courier New";
+        font-size:9pt;
+      }
+      tr.sample{
+        height:2em;
+      }
+      td.sample{
+      }
+      table.outer > tbody > tr > td{
+        border-left: black solid 1px;
+        vertical-align:top;
+      }
+      table.tet tr{
+        background-color:white;
+      }
+      div.nabe{
+        float:right;
+        width:200px;
+        background-color:#eee;
+        text-align:center;
+      }
+      .nabe_c{
+        text-align:center;
+        }
+      div.main_fig{
+       float:right;
+       background-color:white;
+      }
+      th.width3em{
+        width:3em;
+      }
+      .height2em{
+        height:2em;
+      }
+  %body
+    %div.svg
+      -src = S0
+      -layers = src.split("/")[0].split(",").map(&:to_i)
+      -m = src.split("/")[1].to_i
+      -w = 100
+      -h = 100
+      -gap = 3
+      -ch=h+gap*2
+      -cw=w+gap*2
+      -tw = 400
+      -stroke_w = 1.0*ch/tw
+      -th = tw * ch / cw
+      %svg{ width:"#{tw}px", height:"#{th}px",  viewBox:"#{-gap} #{-gap} #{w+gap*2} #{h+gap*2}" }
+        %g{ "font-size"=>0.7, "font-family"=>"'Marvel', sans-serif", "text-anchor"=>"middle", fill:"black" }
+          -src.split("/").each do |srect|
+            -rect = Rect.new(srect)
+            -fill = rand<0.5 ? "#f0f" : "#0f0"
+            %rect{ width:rect.w, height:rect.h, x:rect.x+gap, y:rect.y+gap, style:"fill:#{fill};stroke-width:#{stroke_w}", stroke:"black"}
+
+    %h1=TITLE
+    %h2 問題の概要
+    %p
+      右図のように盤面に矩形がいくつか描かれている。
+      %br
+      そうすると、盤面に矩形がいくつかできる。
+      %br
+      できあがった矩形のうち、なかになにもない矩形（右図の緑色）の面積を小さい順にリストアップせよ。
+    %h2 入力
+    %p
+      入力はこんな感じ：
+      %br
+      %code=S0
+      %br
+      矩形の情報がスラッシュ区切りで並んでいる。
+      %br
+      各矩形はコンマ区切りで 左端, 上端, 右端, 下端 を並べてある。
+      %br
+      座標はすべて二桁の10進数。
+    %h2 出力
+    %p
+      出力は、面積を、小さい順に10進数で。
+      %br
+      こんな
+      %br
+      %code=solve(S0)
+      %br
+      感じ。
+    %h2 補足
+    %ul
+      %li 不正な入力に対処する必要はない。
+      %li 入力はJSONでもいいし、テスト関数でもいいし、標準入力でもいいし、それ以外のなにかでもいい。
+      - if QIITA_URL
+        %li
+          実装ができた方は
+          %a{ href:QIITA_URL }Qiitaの記事
+          のコメント欄からリンクを張っていただくと見つけやすくて助かります。
+      %li
+        この問題は#{EVENT_DATE.zip( %w(年 月 日) ).flatten.join}に開催される オフラインリアルタイムどう書く#{EVENT_ID} の#{REAL_Q ? "問題" : "参考問題"}です。イベントについては
+        %a{ href:EVENT_URL } Doorkeeper のページ
+        の方を御覧下さい。
+      -if ! REAL_Q
+        %li この問題と同程度の難易度の、簡単な問題を出す予定です。
+    %h2 サンプルデータ
+    %table.sample
+      %tr
+        %th #
+        %th 入力
+        %th 期待
+        %th 図へのリンク
+      - SAMPLES.each.with_index(0) do |src,ix|
+        %tr.sample
+          %td=ix
+          %td.sample
+            %code.src=src
+          %td
+            %code.expected=solve(src)
+          %td
+            %a{ href:"./figs.html##{ix}" } リンク
+    %h2 C/C++/Java 用のテストデータ
+    %textarea
+      -SAMPLES.each.with_index do |s,ix|
+        = %Q!/*%d*/ test( %s, %s );\n! % [ix, s.inspect, solve(s).inspect]
+
+    %h2 JSON 形式のテストデータ
+    %p
+      %a{ href:"data.json" } data.json

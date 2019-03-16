@@ -1,0 +1,123 @@
+-#coding:utf-8
+!!! 5
+-srand(0)
+-require "problem"
+%html
+  %head
+    %meta{ :charset=>'utf-8' }
+    %title=TITLE
+    :css
+      @import url('https://fonts.googleapis.com/css?family=Marvel');
+      body, textarea {
+        font-family: sans-serif;
+        font-size:11pt;
+      }
+      textarea {
+        font-size:7pt;
+        width:80%;
+        height:7em;
+      }
+      div.svg{
+        background-color:white;
+      }
+      ul * {
+        line-height:160%;
+      }
+      td.center{ text-align:center; }
+      tr:nth-child(even) { background-color: #fafafa }
+      tr:nth-child(odd) { background-color: #f0f0f0 }
+      code {
+        background-color: #d8d8d8;
+        font-family:monospace;
+        padding:2pt 2pt 2pt 2pt ;
+        margin:1pt 1pt 1pt 1pt ;
+        border-radius:4px;
+      }
+      h1{
+        border-top : solid 2px #bbb;
+        border-left : solid 16px #bbb;
+        background-color: #f8f8f8;
+      }
+      h2{
+        border-top : solid 2px #bbb;
+        border-left : solid 8px #bbb;
+        background-color: #f8f8f8;
+      }
+      h3{
+        border-top : solid 1px #bbb;
+        border-left : solid 4px #bbb;
+        background-color: #f8f8f8;
+      }
+      h4{
+        background-color: #f8f8f8;
+      }
+      code.src, code.expected{
+        word-break: break-all;
+        font-family:"Ricty","Consolas","Courier New";
+      }
+      img.sample{
+        width:150px;
+        height:150px;
+      }
+      img.top{
+        width:320px;
+      }
+      .narrow{
+        font-family:"Ricty","Courier New";
+        font-size:9pt;
+      }
+      tr.sample{
+        height:2em;
+      }
+      td.sample{
+      }
+      table.outer > tbody > tr > td{
+        border-left: black solid 1px;
+        vertical-align:top;
+      }
+      table.tet tr{
+        background-color:white;
+      }
+      div.nabe{
+        float:right;
+        width:200px;
+        background-color:#eee;
+        text-align:center;
+      }
+      .nabe_c{
+        text-align:center;
+        }
+      div.main_fig{
+       float:right;
+       background-color:white;
+      }
+      th.width3em{
+        width:3em;
+      }
+      .height2em{
+        height:2em;
+      }
+  %body
+    %h1=TITLE
+  - SAMPLES.each.with_index(0) do |src,ix|
+    %h2
+      %a{ name:ix } ##{ix}
+    src:
+    %code=src
+    &nbsp;
+    expected:
+    %code=solve(src)
+    %br{clear:"all"}
+    %div.svg
+      -src = S0
+      -layers = src.split("/")[0].split(",").map(&:to_i)
+      -m = src.split("/")[1].to_i
+      -w = 100
+      -h = 100
+      -gap = 3
+      -ch=h+gap*2
+      -cw=w+gap*2
+      -tw = 500
+      -th = tw * ch / cw
+      %svg{ width:"#{tw}px", height:"#{th}px",  viewBox:"#{-gap} #{-gap} #{w+gap*2} #{h+gap*2}" }
+        %g{ "font-size"=>0.7, "font-family"=>"'Marvel', sans-serif", "text-anchor"=>"middle", fill:"black" }
