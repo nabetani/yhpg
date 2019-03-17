@@ -103,8 +103,8 @@
       -src = S0
       -layers = src.split("/")[0].split(",").map(&:to_i)
       -m = src.split("/")[1].to_i
-      -w = 100
-      -h = 100
+      -w = FIELD_W
+      -h = FIELD_H
       -gap = 3
       -ch=h+gap*2
       -cw=w+gap*2
@@ -113,6 +113,8 @@
       -th = 1.0*tw * ch / cw
       %svg{ width:"#{tw}px", height:"#{th}px",  viewBox:"#{-gap} #{-gap} #{w+gap*2} #{h+gap*2}" }
         %g{ "font-size"=>0.7, "font-family"=>"'Marvel', sans-serif", "text-anchor"=>"middle", fill:"black" }
+          -listup(src).each do |rect|
+            %rect{ width:rect.w, height:rect.h, x:rect.x+gap, y:rect.y+gap, style:"fill:#{randcol};stroke-width:0", "fill-opacity"=>0.5}
           -src.split("/").each do |srect|
             -rect = Rect.new(srect)
             %rect{ width:rect.w, height:rect.h, x:rect.x+gap, y:rect.y+gap, style:"fill:none;stroke-width:#{stroke_w}", stroke:"black"}
