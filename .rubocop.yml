@@ -62,4 +62,4 @@ Style/FormatString:
   Enabled: false
 
 Layout/SpaceAfterNot:
-  Enable: false
+  Enabled: false
