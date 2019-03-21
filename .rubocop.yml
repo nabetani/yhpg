@@ -60,3 +60,6 @@ Style/PercentLiteralDelimiters:
 
 Style/FormatString:
   Enabled: false
+
+Layout/SpaceAfterNot:
+  Enable: false
