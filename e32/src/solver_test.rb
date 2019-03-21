@@ -13,4 +13,3 @@ class SolverTest < Minitest::Test
     end
   end
 end
-
