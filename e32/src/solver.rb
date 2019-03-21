@@ -51,9 +51,7 @@ class Solver
   def seg_cover?(s, segs)
     non_covered = s.lo
     segs.select{ |e| e.level == s.level }.each do |e|
-      if e.lo<=non_covered && non_covered<e.hi
-        non_covered = e.hi
-      end
+      non_covered = e.hi if e.lo<=non_covered && non_covered<e.hi
     end
     s.hi<=non_covered
   end
