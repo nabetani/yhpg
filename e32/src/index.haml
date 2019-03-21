@@ -99,26 +99,34 @@
         height:2em;
       }
   %body
+    %h1=TITLE
+    -w = FIELD_W
+    -h = FIELD_H
+    -gap = 1
+    -ch=h+gap*2
+    -cw=w+gap*2
+    -tw = 600
+    -stroke_w = 2.0*ch/tw
+    -th = 1.0*tw * ch / cw
+    -fg = 3.0*ch/tw
+    -dash = ([1.0*ch/tw]*2).join(",")
     %div.svg
       -src = S0
-      -w = FIELD_W
-      -h = FIELD_H
-      -gap = 3
-      -ch=h+gap*2
-      -cw=w+gap*2
-      -tw = 400
-      -stroke_w = 2.0*ch/tw
-      -th = 1.0*tw * ch / cw
-      -fg = 3.0*ch/tw
       %svg{ width:"#{tw}px", height:"#{th}px",  viewBox:"#{-gap} #{-gap} #{w+gap*2} #{h+gap*2}" }
         %g{ "font-size"=>0.7, "font-family"=>"'Marvel', sans-serif", "text-anchor"=>"middle", fill:"black" }
-          -listup(src).each do |rect|
-            %rect{ width:rect.w-fg*2, height:rect.h-fg*2, x:rect.x+gap+fg, y:rect.y+gap+fg, style:"fill:#33ff33;stroke-width:#{fg}", stroke:"#008800", "fill-opacity"=>0.5}
-          -src.split("/").each do |srect|
-            -rect = new_rect(srect)
-            %rect{ width:rect.w, height:rect.h, x:rect.x+gap, y:rect.y+gap, style:"fill:none;stroke-width:#{stroke_w}", stroke:"black"}
+          %g{ style:"fill:#33ff33" }
+            -listup(src).each do |rect|
+              %rect{ width:rect.w-fg*2, height:rect.h-fg*2, x:rect.x+fg, y:rect.y+fg}
+          %g{ style:"fill:none;stroke-width:#{stroke_w}", stroke:"black" }
+            -src.split("/").each do |srect|
+              -rect = new_rect(srect)
+              %rect{ width:rect.w, height:rect.h, x:rect.x, y:rect.y }
+          %g{ style:"stroke-width:#{stroke_w/4}", "stroke-dasharray"=>dash, stroke:"black" }
+            -(w+1).times do |x|
+              %line{ x1:x, x2:x, y1:0, y2:h }
+            -(h+1).times do |y|
+              %line{ x1:0, x2:w, y1:y, y2:y }
 
-    %h1=TITLE
     %h2 問題の概要
     %p
       右図のように盤面に矩形がいくつか描かれている。
