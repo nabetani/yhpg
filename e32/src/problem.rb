@@ -74,4 +74,4 @@ SAMPLES = [
       make(rand_sample(size,v))
     }
   }
-].flatten#.sort_by{ |x| [ (x+solve(x)).size, x ] }
+].flatten.sort_by{ |x| [ (x+solve(x)).size, x ] }
