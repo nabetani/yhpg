@@ -59,8 +59,6 @@ class Solver
     @rects = rects
     @hsegs = rects.flat_map(&:hsegs).sort_by(&:values)
     @vsegs = rects.flat_map(&:vsegs).sort_by(&:values)
-    @ys = @hsegs.map(&:y).sort.uniq
-    @xs = @vsegs.map(&:x).sort.uniq
   end
 
   def hseg_cover?(s)
@@ -91,10 +89,12 @@ class Solver
   end
 
   def cleans
-    @ys.combination(2).with_object([]) do |(t,b),o|
-      @xs.combination(2) do |l,r|
+    ys = @hsegs.map(&:y).sort.uniq
+    xs = @vsegs.map(&:x).sort.uniq
+    ys.combination(2).flat_map do |t,b|
+      xs.combination(2).flat_map do |l,r|
         c = Rect.new( l, t, r, b )
-        o.push(c) if clean?(c)
+        clean?(c) ? [c] : []
       end
     end
   end
