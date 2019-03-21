@@ -5,11 +5,9 @@ require "pp"
 FIELD_H = 36
 FIELD_W = 36
 
-HSeg = Struct.new( :y, :left, :right ) do
-end
+HSeg = Struct.new( :y, :left, :right )
 
-VSeg = Struct.new( :x, :top, :bottom ) do
-end
+VSeg = Struct.new( :x, :top, :bottom )
 
 Rect = Struct.new( :x, :y, :right, :bottom ) do
   def initialize( *src )
@@ -52,9 +50,7 @@ Rect = Struct.new( :x, :y, :right, :bottom ) do
   end
 
   def partial_intersect?(other)
-    return false if no_connection?(other)
-    return false if other.include?(self)
-    true
+    ! no_connection?(other) && ! other.include?(self)
   end
 end
 
