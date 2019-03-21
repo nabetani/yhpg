@@ -7,7 +7,7 @@
     %meta{ :charset=>'utf-8' }
     %title=TITLE
     :css
-      @import url('https://fonts.googleapis.com/css?family=Marvel');
+      @import url('https://fonts.googleapis.com/css?family=Anonymous+Pro');
       body, textarea {
         font-family: sans-serif;
         font-size:11pt;
@@ -43,62 +43,22 @@
         border-left : solid 8px #bbb;
         background-color: #f8f8f8;
       }
-      h3{
-        border-top : solid 1px #bbb;
-        border-left : solid 4px #bbb;
-        background-color: #f8f8f8;
-      }
-      h4{
-        background-color: #f8f8f8;
-      }
       code.src, code.expected{
         word-break: break-all;
         font-family:"Ricty","Consolas","Courier New";
       }
-      img.sample{
-        width:150px;
-        height:150px;
-      }
-      img.top{
-        width:320px;
-      }
-      .narrow{
-        font-family:"Ricty","Courier New";
-        font-size:9pt;
-      }
-      tr.sample{
-        height:2em;
-      }
-      td.sample{
-      }
-      table.outer > tbody > tr > td{
-        border-left: black solid 1px;
-        vertical-align:top;
-      }
-      table.tet tr{
-        background-color:white;
-      }
-      div.nabe{
-        float:right;
-        width:200px;
-        background-color:#eee;
-        text-align:center;
-      }
-      .nabe_c{
-        text-align:center;
-        }
-      div.main_fig{
-       float:right;
-       background-color:white;
-      }
-      th.width3em{
-        width:3em;
-      }
-      .height2em{
-        height:2em;
-      }
   %body
     %h1=TITLE
+  -w = FIELD_W
+  -h = FIELD_H
+  -gap = 1
+  -ch=h+gap*2
+  -cw=w+gap*2
+  -tw = 600
+  -stroke_w = 2.0*ch/tw
+  -th = 1.0*tw * ch / cw
+  -fg = 3.0*ch/tw
+  -dash = ([1.0*ch/tw]*2).join(",")
   - SAMPLES.each.with_index(0) do |src,ix|
     %h2
       %a{ name:ix } ##{ix}
@@ -109,15 +69,26 @@
     %code=solve(src)
     %br{clear:"all"}
     %div.svg
-      -src = S0
-      -layers = src.split("/")[0].split(",").map(&:to_i)
-      -m = src.split("/")[1].to_i
-      -w = 100
-      -h = 100
-      -gap = 3
-      -ch=h+gap*2
-      -cw=w+gap*2
-      -tw = 500
-      -th = tw * ch / cw
       %svg{ width:"#{tw}px", height:"#{th}px",  viewBox:"#{-gap} #{-gap} #{w+gap*2} #{h+gap*2}" }
-        %g{ "font-size"=>0.7, "font-family"=>"'Marvel', sans-serif", "text-anchor"=>"middle", fill:"black" }
+        %defs
+          %radialGradient{ id:"green", cx:0, cy:0, r:1 }
+            %stop{ offset:"0%", "stop-color"=>"#2f2" }
+            %stop{ offset:"100%", "stop-color"=>"#afa" }
+        %g{ "font-size"=>1.6, "font-family"=>"'Anonymous Pro', monospace", "text-anchor"=>"middle", fill:"black" }
+          -clean_rects = listup(src)
+          %g{ fill:"url(#green)" }
+            -clean_rects.each do |rect|
+              %rect{ width:rect.w-fg*2, height:rect.h-fg*2, x:rect.x+fg, y:rect.y+fg}
+          %g{ style:"fill:none;stroke-width:#{stroke_w}", stroke:"black" }
+            -src.split("/").each do |srect|
+              -rect = new_rect(srect)
+              %rect{ width:rect.w, height:rect.h, x:rect.x, y:rect.y }
+          %g{ style:"stroke-width:#{stroke_w/4}", "stroke-dasharray"=>dash, stroke:"black" }
+            -(w+1).times do |x|
+              %line{ x1:x, x2:x, y1:0, y2:h }
+            -(h+1).times do |y|
+              %line{ x1:0, x2:w, y1:y, y2:y }
+          %g{}
+            -clean_rects.each do |rect|
+              -c=rect.center
+              %text{ x:c.real+0.1, y:c.imag+0.6 }=rect.size
