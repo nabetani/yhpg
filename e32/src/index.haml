@@ -127,10 +127,10 @@
               -rect = new_rect(srect)
               %rect{ width:rect.w, height:rect.h, x:rect.x, y:rect.y }
           %g{ style:"stroke-width:#{stroke_w/4}", "stroke-dasharray"=>dash, stroke:"black" }
-            -(w+1).times do |x|
-              %line{ x1:x, x2:x, y1:0, y2:h }
-            -(h+1).times do |y|
-              %line{ x1:0, x2:w, y1:y, y2:y }
+            -w.times do |x|
+              %line{ x1:x, x2:x, y1:0, y2:h-1 }
+            -h.times do |y|
+              %line{ x1:0, x2:w-1, y1:y, y2:y }
           %g{}
             -clean_rects.each do |rect|
               -c=rect.center
