@@ -113,9 +113,13 @@
     %div.svg
       -src = S0
       %svg{ width:"#{tw}px", height:"#{th}px",  viewBox:"#{-gap} #{-gap} #{w+gap*2} #{h+gap*2}" }
+        %defs
+          %radialGradient{ id:"green", cx:0, cy:0, r:1 }
+            %stop{ offset:"0%", "stop-color"=>"#2f2" }
+            %stop{ offset:"100%", "stop-color"=>"#afa" }
         %g{ "font-size"=>2.2, "font-family"=>"'Anonymous Pro', monospace", "text-anchor"=>"middle", fill:"black" }
           -clean_rects = listup(src)
-          %g{ style:"fill:#33ff33" }
+          %g{ fill:"url(#green)" }
             -clean_rects.each do |rect|
               %rect{ width:rect.w-fg*2, height:rect.h-fg*2, x:rect.x+fg, y:rect.y+fg}
           %g{ style:"fill:none;stroke-width:#{stroke_w}", stroke:"black" }
