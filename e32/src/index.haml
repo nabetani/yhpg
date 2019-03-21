@@ -7,7 +7,7 @@
     %meta{ :charset=>'utf-8' }
     %title=TITLE
     :css
-      @import url('https://fonts.googleapis.com/css?family=Marvel');
+      @import url('https://fonts.googleapis.com/css?family=Anonymous+Pro');
       body, textarea {
         font-family: sans-serif;
         font-size:11pt;
@@ -113,9 +113,10 @@
     %div.svg
       -src = S0
       %svg{ width:"#{tw}px", height:"#{th}px",  viewBox:"#{-gap} #{-gap} #{w+gap*2} #{h+gap*2}" }
-        %g{ "font-size"=>0.7, "font-family"=>"'Marvel', sans-serif", "text-anchor"=>"middle", fill:"black" }
+        %g{ "font-size"=>2.2, "font-family"=>"'Anonymous Pro', monospace", "text-anchor"=>"middle", fill:"black" }
+          -clean_rects = listup(src)
           %g{ style:"fill:#33ff33" }
-            -listup(src).each do |rect|
+            -clean_rects.each do |rect|
               %rect{ width:rect.w-fg*2, height:rect.h-fg*2, x:rect.x+fg, y:rect.y+fg}
           %g{ style:"fill:none;stroke-width:#{stroke_w}", stroke:"black" }
             -src.split("/").each do |srect|
@@ -126,6 +127,12 @@
               %line{ x1:x, x2:x, y1:0, y2:h }
             -(h+1).times do |y|
               %line{ x1:0, x2:w, y1:y, y2:y }
+          %g{}
+            -clean_rects.each do |rect|
+              -c=rect.center
+              %text{ x:c.real+0.1, y:c.imag+0.6 }=rect.size
+
+
 
     %h2 問題の概要
     %p
