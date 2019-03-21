@@ -110,6 +110,7 @@
     -th = 1.0*tw * ch / cw
     -fg = 3.0*ch/tw
     -dash = ([1.0*ch/tw]*2).join(",")
+    -cols=%w( #000 #f00 #00f #0aa #a0a #aa0 #966 #669 #696 )
     %div.svg
       -src = S0
       %svg{ width:"#{tw}px", height:"#{th}px",  viewBox:"#{-gap} #{-gap} #{w+gap*2} #{h+gap*2}" }
@@ -122,10 +123,10 @@
           %g{ fill:"url(#green)" }
             -clean_rects.each do |rect|
               %rect{ width:rect.w-fg*2, height:rect.h-fg*2, x:rect.x+fg, y:rect.y+fg}
-          %g{ style:"fill:none;stroke-width:#{stroke_w}", stroke:"black" }
-            -src.split("/").each do |srect|
+          %g{ style:"fill:none;stroke-width:#{stroke_w}" }
+            -src.split("/").zip(cols).each do |srect,col|
               -rect = new_rect(srect)
-              %rect{ width:rect.w, height:rect.h, x:rect.x, y:rect.y }
+              %rect{ width:rect.w, height:rect.h, x:rect.x, y:rect.y, stroke:col }
           %g{ style:"stroke-width:#{stroke_w/4}", "stroke-dasharray"=>dash, stroke:"black" }
             -w.times do |x|
               %line{ x1:x, x2:x, y1:0, y2:h-1 }
