@@ -75,7 +75,7 @@ def scan_field( f )
       rc = rect_at( f, x, y )
       next unless rc
       fill_nil( f, rc )
-      show(f)
+      # show(f)
       rects.push rc
     end
   end
@@ -105,7 +105,7 @@ def find_cleans( rects )
       end
     end
   end
-  show(field)
+  # show(field)
   scan_field( field )
 end
 
