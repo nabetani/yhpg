@@ -54,6 +54,7 @@ srand(0)
 SAMPLES = [
   S0,
 ] + [
+  "00ab/p0zd/0ofz/87rs",
   %w(
     1122
     1144/2233
