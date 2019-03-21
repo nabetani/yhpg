@@ -5,6 +5,12 @@ require "pp"
 FIELD_H = 36
 FIELD_W = 36
 
+HSeg = Struct.new( :y, :left, :right ) do
+end
+
+VSeg = Struct.new( :x, :top, :bottom ) do
+end
+
 Rect = Struct.new( :x, :y, :right, :bottom ) do
   def initialize( *src )
     case src.size
@@ -15,6 +21,14 @@ Rect = Struct.new( :x, :y, :right, :bottom ) do
     else
       raise "invalid ctor parameters:#{src.inspect}"
     end
+  end
+
+  def hsegs
+    [HSeg.new( y, x, right ), HSeg.new( bottom, x, right ) ]
+  end
+
+  def vsegs
+    [VSeg.new( x, y, bottom), VSeg.new( right, y, bottom ) ]
   end
 
   def w
@@ -28,90 +42,71 @@ Rect = Struct.new( :x, :y, :right, :bottom ) do
   def size
     w*h
   end
-end
 
-def boundary_x_ok?(f, rc, me)
-  (rc.y...rc.bottom).all? do |iy|
-    me != f[pos(rc.x-1,iy)] && me != f[pos(rc.right,iy)]
+  def include?(c)
+    x<=c.x && y<=c.y && c.right<=right && c.bottom<=bottom
+  end
+
+  def no_connection?(c)
+    c.right<=x || c.bottom<=y || right<=c.x || bottom<=c.y
+  end
+
+  def partial_intersect?(other)
+    return false if no_connection?(other)
+    return false if other.include?(self)
+    true
   end
 end
 
-def boundary_y_ok?(f, rc, me)
-  (rc.x...rc.right).all? do |ix|
-    me != f[pos(ix,rc.y-1)] && me != f[pos(ix,rc.bottom)]
+class Solver
+  def initialize( rects )
+    @rects = rects
+    @hsegs = rects.flat_map(&:hsegs).sort_by(&:values)
+    @vsegs = rects.flat_map(&:vsegs).sort_by(&:values)
+    @ys = @hsegs.map(&:y).sort.uniq
+    @xs = @vsegs.map(&:x).sort.uniq
   end
-end
 
-def rect_at( f, x, y )
-  me = f[pos(x,y)]
-  return nil unless me
-  right = (x..FIELD_W).find{ |e| f[pos(e,y)]!=me }
-  bottom = (y..FIELD_H).find{ |e| f[pos(x,e)]!=me }
-  return nil if right.nil? || bottom.nil?
-  rc=Rect.new( x, y, right, bottom )
-  return nil unless boundary_x_ok?(f, rc, me) && boundary_y_ok?(f, rc, me)
-  filled =
-  (y...bottom).all? do |iy|
-    (x...right).all? do |ix|
-      f[pos(ix,iy)]==me
+  def hseg_cover?(s)
+    non_covered = s.left
+    @hsegs.select{ |e| e.y == s.y }.each do |e|
+      if e.left<=non_covered && non_covered<e.right
+        non_covered = e.right
+      end
     end
+    s.right<=non_covered
   end
-  return nil unless filled
-  rc
-end
 
-def fill_nil( f, rc )
-  (rc.y...rc.bottom).each do |y|
-    (rc.x...rc.right).each do |x|
-      f[pos(x,y)] = nil
+  def vseg_cover?(s)
+    non_covered = s.top
+    @vsegs.select{ |e| e.x == s.x }.each do |e|
+      if e.top<=non_covered && non_covered<e.bottom
+        non_covered = e.bottom
+      end
     end
+    s.bottom<=non_covered
   end
-end
 
-def scan_field( f )
-  rects=[]
-  (1...FIELD_H).each do |y|
-    (1...FIELD_W).each do |x|
-      rc = rect_at( f, x, y )
-      next unless rc
-      fill_nil( f, rc )
-      # show(f)
-      rects.push rc
-    end
+  def clean?(c)
+    return false if @rects.any?{ |rc| c.partial_intersect?(rc) }
+    return false unless c.hsegs.all?{ |s| hseg_cover?(s) }
+    return false unless c.vsegs.all?{ |s| vseg_cover?(s) }
+    true
   end
-  rects
-end
 
-def pos(x,y)
-  (FIELD_W+2) * (y+1) + (x+1)
-end
-
-def show(f)
-  (0...(FIELD_H+2)).each do |y|
-    (0...(FIELD_W+2)).each do |x|
-      v=f[pos(x-1,y-1)]
-      print( v ? v.to_s(36) : "*" )
-    end
-    puts
-  end
-end
-
-def find_cleans( rects )
-  field=Array.new( (FIELD_W+2)*(FIELD_H+2) ){ 0 }
-  rects.each.with_index do |rc, ix|
-    (rc.y...rc.bottom).each do |y|
-      (rc.x...rc.right).each do |x|
-        field[pos(x,y)] += 1<<ix
+  def cleans
+    @ys.combination(2).with_object([]) do |(t,b),o|
+      @xs.combination(2) do |l,r|
+        c = Rect.new( l, t, r, b )
+        o.push(c) if clean?(c)
       end
     end
   end
-  # show(field)
-  scan_field( field )
 end
 
 def listup( src )
   rects = src.split("/").map{ |e| Rect.new(e) }
-  find_cleans( rects )
+  Solver.new( rects ).cleans
 end
 
 def solve( src )
