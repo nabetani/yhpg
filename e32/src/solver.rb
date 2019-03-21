@@ -2,8 +2,8 @@
 
 require "pp"
 
-FIELD_H = 36
 FIELD_W = 36
+FIELD_H = 36
 
 Seg = Struct.new( :level, :lo, :hi )
 
