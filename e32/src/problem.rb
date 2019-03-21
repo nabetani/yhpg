@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "solver"
 
 EVENT_ID="E32"
@@ -6,7 +8,6 @@ EVENT_DATE=[2019,4,6]
 EVENT_URL="https://yhpg.doorkeeper.jp/events/88379"
 QIITA_URL = nil
 TITLE="きれいな四角 #{EVENT_DATE.join(".")}"
-
 
 def randcol
   "#%03x" % rand(0x1000)
