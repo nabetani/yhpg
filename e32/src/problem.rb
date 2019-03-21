@@ -42,10 +42,22 @@ class Rect
   end
 end
 
+def rand_sample(s,v)
+  Array.new(s*2){
+    xs = [*1..v].sample(2).sort
+    ys = [*1..v].sample(2).sort
+    xs.zip(ys).flatten.map{ |e| e.to_s(36) }.join
+  }.uniq.take(s).join("/")
+end
+
+srand(0)
 SAMPLES = [
   S0,
 ] + [
   %w(
+    1122
+    1144/2233
+    2143/1234
     2132/3243/1223/2334
     1143/2132/2233
     2245/1334/3154
@@ -55,5 +67,11 @@ SAMPLES = [
     2144/3255/1346
     2143/4264/3466/1335
     3164/5387/1246/2578
-  ).map{ |e| make(e) }
+    2132/1223/4152/5263/1425/2536/4556/5465
+  ).map{ |e| make(e) },
+  [*3..8].map{ |size|
+    [*3..6,36].map{ |v|
+      make(rand_sample(size,v))
+    }
+  }
 ].flatten#.sort_by{ |x| [ (x+solve(x)).size, x ] }
