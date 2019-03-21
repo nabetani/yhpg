@@ -13,7 +13,7 @@ def randcol
   "#%03x" % rand(0x1000)
 end
 
-S0="1ayd/b3gw/d7qq"
+S0="6ayf/43gw/d7qq/mlop"
 
 SAMPLES = [
   S0
