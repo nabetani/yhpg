@@ -91,4 +91,19 @@
           %g{}
             -clean_rects.each do |rect|
               -c=rect.center
-              %text{ x:c.real+0.1, y:c.imag+0.6 }=rect.size
+              -s=rect.size.to_s
+              -font_size = nil
+              -if rect.w==1
+                -if rect.h==1
+                  -font_size=1
+                -elsif 1<s.size
+                  -font_size=0.6
+                -else
+                  -font_size=1.2
+              -elsif rect.h==1
+                -font_size=1
+              -if font_size.nil?
+                %text{ x:c.real+0.1, y:c.imag+0.6 }=s
+              -else
+                -delta = font_size * 0.6 / 1.6
+                %text{ x:c.real+0.1, y:c.imag+delta, "font-size"=>font_size }=s
