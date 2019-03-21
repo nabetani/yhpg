@@ -116,7 +116,7 @@
           -listup(src).each do |rect|
             %rect{ width:rect.w, height:rect.h, x:rect.x+gap, y:rect.y+gap, style:"fill:#{randcol};stroke-width:0", "fill-opacity"=>0.5}
           -src.split("/").each do |srect|
-            -rect = Rect.new(srect)
+            -rect = new_rect(srect)
             %rect{ width:rect.w, height:rect.h, x:rect.x+gap, y:rect.y+gap, style:"fill:none;stroke-width:#{stroke_w}", stroke:"black"}
 
     %h1=TITLE

@@ -13,6 +13,10 @@ def randcol
   "#%03x" % rand(0x1000)
 end
 
+def new_rect(src)
+  Rect.new(*src.chars.map{ |s| s.to_i(36) })
+end
+
 S0="6ayf/43gw/d7qq/mlop"
 
 SAMPLES = [

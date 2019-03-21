@@ -8,17 +8,6 @@ FIELD_W = 36
 Seg = Struct.new( :level, :lo, :hi )
 
 Rect = Struct.new( :x, :y, :right, :bottom ) do
-  def initialize( *src )
-    case src.size
-    when 1
-      super( *src[0].chars.map{ |e| e.to_i(36) } )
-    when 4
-      super(*src)
-    else
-      raise "invalid ctor parameters:#{src.inspect}"
-    end
-  end
-
   def hsegs
     [Seg.new( y, x, right ), Seg.new( bottom, x, right ) ]
   end
@@ -89,7 +78,7 @@ class Solver
 end
 
 def listup( src )
-  rects = src.split("/").map{ |e| Rect.new(e) }
+  rects = src.split("/").map{ |e| Rect.new(*e.chars.map{ |s| s.to_i(36) }) }
   Solver.new( rects ).cleans
 end
 
