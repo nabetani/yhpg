@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "pp"
 require "json"
 
 Seg = Struct.new( :level, :lo, :hi )
@@ -14,16 +13,8 @@ Rect = Struct.new( :x, :y, :right, :bottom ) do
     [Seg.new( x, y, bottom), Seg.new( right, y, bottom ) ]
   end
 
-  def w
-    right-x
-  end
-
-  def h
-    bottom-y
-  end
-
   def size
-    w*h
+    (right-x)*(bottom-y)
   end
 
   def include?(c)
@@ -73,13 +64,10 @@ class Solver
   end
 end
 
-def listup( src )
-  rects = src.split("/").map{ |e| Rect.new(*e.chars.map{ |s| s.to_i(36) }) }
-  Solver.new( rects ).cleans
-end
-
 def solve( src )
-  listup( src ).map(&:size).sort.join(",")
+  rects = src.split("/").map{ |e| Rect.new(*e.chars.map{ |s| s.to_i(36) }) }
+  cleans = Solver.new( rects ).cleans
+  cleans.map(&:size).sort.join(",")
 end
 
 if __FILE__==$PROGRAM_NAME
