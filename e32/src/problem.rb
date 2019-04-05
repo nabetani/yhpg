@@ -44,8 +44,8 @@ end
 
 def rand_sample(s,v)
   Array.new(s*2){
-    xs = [*1..v].sample(2).sort
-    ys = [*1..v].sample(2).sort
+    xs = [*0...v].sample(2).sort
+    ys = [*0...v].sample(2).sort
     xs.zip(ys).flatten.map{ |e| e.to_s(36) }.join
   }.uniq.take(s).join("/")
 end
