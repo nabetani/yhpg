@@ -78,3 +78,20 @@ SAMPLES = [
     }
   }
 ].flatten.sort_by{ |x| [ (x+solve(x)).size, x ] }
+
+def check(s)
+  raise "empty" if s.empty?
+  rects = s.split("/")
+  rects.each do |rect|
+    raise "bad rect string size" unless rect.size==4
+    x, y, r, b = rect.chars.map{ |e| e.to_i(36) }
+    recomposed = [x,y,r,b].map{ |e| e.to_s(36) }.join
+    raise "bad rect text" unless recomposed == rect
+    raise "x invert" unless x<r
+    raise "y invert" unless y<b
+  end
+end
+
+SAMPLES.each do |s|
+  check(s)
+end
