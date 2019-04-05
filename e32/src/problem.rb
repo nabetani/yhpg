@@ -17,7 +17,7 @@ def new_rect(src)
   Rect.new(*src.chars.map{ |s| s.to_i(36) })
 end
 
-S0="6ayf/43gw/d7qq/mlop"
+S0="43gw/d7qq/mlop"
 
 def make(s)
   r = s.split("/").map{ |e| 
@@ -57,6 +57,8 @@ SAMPLES = [
   "00ab/p0zd/0ofz/87rs",
   %w(
     1122
+    1256/2345/3164
+    2235/0374
     1144/2233
     2143/1234
     2132/3243/1223/2334
@@ -70,7 +72,7 @@ SAMPLES = [
     3164/5387/1246/2578
     2132/1223/4152/5263/1425/2536/4556/5465
   ).map{ |e| make(e) },
-  [*3..8].map{ |size|
+  [*3..9].map{ |size|
     [4, 6, 8, 12, 36].map{ |v|
       make(rand_sample(size,v))
     }
