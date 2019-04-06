@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -51,24 +52,24 @@ func makeField(rects []rectType) map[int]int {
 	return f
 }
 
-func findRight(field map[int]int, x0, y0 int) int {
+func findRight(field map[int]int, x0, y0 int) (int, error) {
 	val0 := field[x0+y0*n]
 	for x := x0; x < wh+1; x++ {
 		if val0 != field[x+y0*n] {
-			return x
+			return x, nil
 		}
 	}
-	return -1
+	return 0, errors.New("no right end found")
 }
 
-func findBottom(field map[int]int, x0, y0 int) int {
+func findBottom(field map[int]int, x0, y0 int) (int, error) {
 	val0 := field[x0+y0*n]
 	for y := y0; y < wh+1; y++ {
 		if val0 != field[x0+y*n] {
-			return y
+			return y, nil
 		}
 	}
-	return -1
+	return 0, errors.New("no bottom end found")
 }
 
 func hborder(field map[int]int, x0, x1, y0, y1 int) bool {
@@ -90,6 +91,7 @@ func vborder(field map[int]int, y0, y1, x0, x1 int) bool {
 	}
 	return true
 }
+
 func samecol(field map[int]int, x0, y0, r, b int) bool {
 	col := field[y0*n+x0]
 	for y := y0; y < b; y++ {
@@ -103,9 +105,6 @@ func samecol(field map[int]int, x0, y0, r, b int) bool {
 }
 
 func isCleanRect(field map[int]int, x, y, r, b int) bool {
-	if r <= x || b <= y {
-		return false
-	}
 	return hborder(field, x, r, y, y-1) &&
 		hborder(field, x, r, b-1, b) &&
 		vborder(field, y, b, x, x-1) &&
@@ -114,8 +113,14 @@ func isCleanRect(field map[int]int, x, y, r, b int) bool {
 }
 
 func getRect(field map[int]int, x, y int) *rectType {
-	r := findRight(field, x, y)
-	b := findBottom(field, x, y)
+	r, err := findRight(field, x, y)
+	if err != nil {
+		return nil
+	}
+	b, err := findBottom(field, x, y)
+	if err != nil {
+		return nil
+	}
 	if isCleanRect(field, x, y, r, b) {
 		return &rectType{x, y, r, b}
 	}
@@ -161,6 +166,7 @@ func main() {
 		log.Fatal(err)
 	}
 	json.Unmarshal(jsonBytes, &data)
+	failCount := 0
 	for _, item := range data["test_data"].([]interface{}) {
 		i := item.(map[string]interface{})
 		e := i["expected"].(string)
@@ -171,6 +177,8 @@ func main() {
 			log.Println("ok", s, e)
 		} else {
 			log.Println("**NG**", s, a, e)
+			failCount++
 		}
 	}
+	log.Println("Fail Count:", failCount)
 }
