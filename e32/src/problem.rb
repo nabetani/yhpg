@@ -19,7 +19,7 @@ end
 
 S0="43gw/d7qq/mlop"
 
-def make(s)
+def make_impl(s)
   r = s.split("/").map{ |e| 
     e.chars.map{|c| c.to_i(36) }
     .each_slice(2)
@@ -34,6 +34,10 @@ def make(s)
   r.map{ |e|
     [ xh[e[0].real], yh[e[0].imag], xh[e[1].real], yh[e[1].imag] ].join
   }.join("/")
+end
+
+def make(s)
+  Array.new(15){ make_impl(s) }.max_by{ |r| solve(r).split(",").uniq.size }
 end
 
 class Rect
