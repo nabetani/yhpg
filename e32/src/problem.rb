@@ -6,7 +6,7 @@ EVENT_ID="E32"
 REAL_Q=true # 本番 / 参考
 EVENT_DATE=[2019,4,6]
 EVENT_URL="https://yhpg.doorkeeper.jp/events/88379"
-QIITA_URL = nil
+QIITA_URL = "https://qiita.com/Nabetani/items/bd16f3fa1d9e4d0d60ae"
 TITLE="きれいな四角 #{EVENT_DATE.join(".")}"
 
 def randcol
