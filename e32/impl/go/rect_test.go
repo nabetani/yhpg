@@ -1,4 +1,4 @@
-package main
+package e32
 
 // `go test -args data.json` で実行する
 

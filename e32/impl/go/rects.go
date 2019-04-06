@@ -1,4 +1,4 @@
-package main
+package e32
 
 import (
 	"errors"
