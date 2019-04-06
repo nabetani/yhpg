@@ -1,12 +1,9 @@
 package main
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -157,28 +154,4 @@ func solve(src string) string {
 		ssizes = append(ssizes, fmt.Sprintf("%d", size))
 	}
 	return strings.Join(ssizes, ",")
-}
-
-func main() {
-	var data map[string]interface{}
-	jsonBytes, err := ioutil.ReadFile(os.Args[1])
-	if err != nil {
-		log.Fatal(err)
-	}
-	json.Unmarshal(jsonBytes, &data)
-	failCount := 0
-	for _, item := range data["test_data"].([]interface{}) {
-		i := item.(map[string]interface{})
-		e := i["expected"].(string)
-		s := i["src"].(string)
-		a := solve(s)
-		ok := e == a
-		if ok {
-			log.Println("ok", s, e)
-		} else {
-			log.Println("**NG**", s, a, e)
-			failCount++
-		}
-	}
-	log.Println("Fail Count:", failCount)
 }
