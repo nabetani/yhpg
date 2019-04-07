@@ -17,24 +17,29 @@ def findRect(field0, x, y):
   mask0 = np.zeros((h + 2, w + 2, 1), dtype=np.uint8)
   _, _, mask, box = cv2.floodFill(
       field, mask0, seedPoint=(x, y), newVal=1)
-  nonzeros = cv2.countNonZero(mask[1:(h+1),1:(w+1)])
+  filled = mask[1:(h+1),1:(w+1)]
+  nonzeros = cv2.countNonZero(filled)
   if box[2] * box[3] == nonzeros:
-    return box
-  return None
+    return box, filled
+  return None, filled
 
 def solve(src):
   rects = [ newRect(s) for s in src.split("/") ]
   field = np.zeros((WH+1, WH+1, 3), np.uint8)
+  checked = np.zeros((WH+1, WH+1, 1), np.uint8)
   col=1
   for r in rects:
     field[r[0]:r[2], r[1]:r[3]]+=np.array([col&255,col//256,0], np.uint8)
     col <<= 1
-  cr=set()
+  cr=[]
   for y in range(1,WH):
     for x in range(1,WH):
-      r = findRect( field, x, y )
+      if 0 != checked[y,x][0]:
+        continue
+      r, ch = findRect( field, x, y )
+      checked += ch
       if r:
-        cr.add(r)
+        cr.append(r)
   sizes = sorted([ r[2]*r[3] for r in cr ])
   return ",".join([str(s) for s in sizes])
 
