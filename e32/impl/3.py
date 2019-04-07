@@ -23,15 +23,17 @@ def findRect(field0, x, y):
     return box, filled
   return None, filled
 
-def solve(src):
-  rects = [ newRect(s) for s in src.split("/") ]
+def buildField(src):
   field = np.zeros((WH+1, WH+1, 3), np.uint8)
-  checked = np.zeros((WH+1, WH+1, 1), np.uint8)
   col=1
-  for r in rects:
+  for r in [ newRect(s) for s in src.split("/") ]:
     field[r[0]:r[2], r[1]:r[3]]+=np.array([col&255,col//256,0], np.uint8)
     col <<= 1
-  cr=[]
+  return field
+
+def collectSizes(field):
+  checked = np.zeros((WH+1, WH+1, 1), np.uint8)
+  sizes=[]
   for y in range(1,WH):
     for x in range(1,WH):
       if 0 != checked[y,x][0]:
@@ -39,9 +41,13 @@ def solve(src):
       r, ch = findRect( field, x, y )
       checked += ch
       if r:
-        cr.append(r)
-  sizes = sorted([ r[2]*r[3] for r in cr ])
-  return ",".join([str(s) for s in sizes])
+        sizes.append(r[2]*r[3])
+  return sizes
+
+def solve(src):
+  field = buildField(src)
+  sizes = collectSizes(field)
+  return ",".join([str(s) for s in sorted(sizes)])
 
 with open(sys.argv[1], "r") as file:
   data = json.load(file)
