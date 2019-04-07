@@ -24,13 +24,12 @@ def newRect(s):
 def findRect(field0, x, y, f):
   field = deepcopy(field0)
   h, w = field.shape[:2]
-  mask = np.zeros((h + 2, w + 2), dtype=np.uint8)
+  mask0 = np.zeros((h + 2, w + 2, 1), dtype=np.uint8)
 
   retval, filled, mask, rect = cv2.floodFill(
-      field, mask, seedPoint=(x, y), newVal=f)
+      field, mask0, seedPoint=(x, y), newVal=1)
 
-  filledArea = cv2.inRange(filled, f, f)
-  cv2.imwrite( "hoge.png", filledArea )
+  filledArea = (mask*255)[1:(h+1),1:(w+1)]
   cons, _ =  cv2.findContours(filledArea, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
   box = cv2.boundingRect(cons[0])
   nonzeros = cv2.countNonZero(filledArea)
@@ -38,24 +37,14 @@ def findRect(field0, x, y, f):
     return box
   return None
 
-def unusedColor(m):
-  h, w = m.shape[:2]
-  cols=set()
-  for y in range(h):
-    for x in range(w):
-      cols.add( m[y,x][0] )
-  for c in range(256):
-    if not( c in cols ):
-      return c
-
 def solve(src):
   rects = [ newRect(s) for s in src.split("/") ]
-  field = np.zeros((WH+1, WH+1, 1), np.uint8)
-  col=128
+  field = np.zeros((WH+1, WH+1, 3), np.uint8)
+  col=1
   for r in rects:
-    field[r.x:r.r, r.y:r.b]+=col
-    col >>= 1
-  f = unusedColor(field)
+    field[r.x:r.r, r.y:r.b]+=np.array([col&255,col//256,0], np.uint8)
+    col <<= 1
+  f = np.array([255,255,255], np.uint8)
   cr=set()
   for y in range(1,WH):
     for x in range(1,WH):
