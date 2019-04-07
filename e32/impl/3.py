@@ -11,7 +11,7 @@ def newRect(s):
   x, y, r, b = [s36.index(x) for x in s ]
   return (x+1, y+1, r+1, b+1)
 
-def findRect(field0, x, y, f):
+def findRect(field0, x, y):
   field = deepcopy(field0)
   h, w = field.shape[:2]
   mask0 = np.zeros((h + 2, w + 2, 1), dtype=np.uint8)
@@ -29,11 +29,10 @@ def solve(src):
   for r in rects:
     field[r[0]:r[2], r[1]:r[3]]+=np.array([col&255,col//256,0], np.uint8)
     col <<= 1
-  f = np.array([255,255,255], np.uint8)
   cr=set()
   for y in range(1,WH):
     for x in range(1,WH):
-      r = findRect( field, x, y, f )
+      r = findRect( field, x, y )
       if r:
         cr.add(r)
   sizes = sorted([ r[2]*r[3] for r in cr ])
