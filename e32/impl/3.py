@@ -18,8 +18,7 @@ def findRect(field0, x, y):
   _, _, mask, box = cv2.floodFill(
       field, mask0, seedPoint=(x, y), newVal=1)
   filled = mask[1:(h+1),1:(w+1)]
-  nonzeros = cv2.countNonZero(filled)
-  if box[2] * box[3] == nonzeros:
+  if box[2] * box[3] == cv2.countNonZero(filled):
     return box, filled
   return None, filled
 
